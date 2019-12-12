@@ -9,9 +9,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,11 +22,25 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends MyAppCompatActivity {
 
     final int RESULT_LOAD_IMAGE = 1;
 
@@ -32,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button registerButton;
     RadioGroup radioGroup;
     RadioButton touristRadioButton, guideRadioButton;
+    de.hdodenhof.circleimageview.CircleImageView profileImageView;
 
     Spinner genderSpinner;
     String Filename;
@@ -50,6 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
         radioGroup = findViewById(R.id.radioGroup);
         touristRadioButton = findViewById(R.id.touristRadioButton);
         guideRadioButton = findViewById(R.id.guideRadioButton);
+        profileImageView = findViewById(R.id.profileImageView);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.Genders, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -59,6 +77,85 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void registerButtonOnClick(View view) {
+
+        final String name, email, password, phone, gender, userType;
+
+        name = nameEditText.getText().toString();
+        email = emailEditText.getText().toString();
+        password = passwordEditText.getText().toString();
+        phone = phoneEditText.getText().toString();
+        if (genderSpinner.getSelectedItemPosition() == 0)
+            gender = "M";
+        else gender = "F";
+
+        if (radioGroup.getCheckedRadioButtonId() == touristRadioButton.getId()) userType = "T";
+        else userType = "G";
+
+
+
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            final FirebaseUser user = mAuth.getCurrentUser();
+
+                            StorageReference storageRef = storage.getReference();
+                            StorageReference imagesRef = storageRef.child("images");
+                            StorageReference userImagesRef = imagesRef.child(user.getUid());
+                            String imageUUID = UUID.randomUUID().toString();
+                            String imageName = imageUUID + ".jpg";
+                            final StorageReference newImageRef = userImagesRef.child(imageName);
+
+                            Bitmap bitmap = ((BitmapDrawable) profileImageView.getDrawable()).getBitmap();
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+
+                            UploadTask uploadTask = newImageRef.putBytes(data);
+                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                @Override
+                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                    if (!task.isSuccessful()) {
+                                        throw task.getException();
+                                    }
+                                    return newImageRef.getDownloadUrl();
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if (task.isSuccessful()) {
+                                        Uri downloadUri = task.getResult();
+                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                .setDisplayName(name)
+                                                .setPhotoUri(downloadUri)
+                                                .build();
+                                        user.updateProfile(profileUpdates)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(getApplicationContext(), "User successfully created!", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+
+                                    } else {
+
+                                    }
+                                }
+                            });
+
+
+
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
     }
 
     public void profileImageOnClick(View view) {

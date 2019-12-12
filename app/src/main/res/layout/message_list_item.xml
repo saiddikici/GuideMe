@@ -14,7 +14,7 @@
         android:layout_marginBottom="10dp"
         android:adjustViewBounds="false"
         android:scaleType="centerCrop"
-        android:src="@drawable/taksimDayı" />
+        android:src="@drawable/taksim_dayi" />
 
     <TextView
         android:id="@+id/chatContentTextView"
