@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login1">E-posta adresi</string>
+    <string name="login2">Şifre</string>
+</resources>

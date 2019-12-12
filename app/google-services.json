@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "783964099613",
+    "firebase_url": "https://guideme-itu.firebaseio.com",
+    "project_id": "guideme-itu",
+    "storage_bucket": "guideme-itu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783964099613:android:158da55660afdfcd46a2f4",
+        "android_client_info": {
+          "package_name": "com.selimkilicaslan.guideme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "783964099613-4hp65dpq6p379bakhrquqcc0a2eor9ab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoeTfhpXws8KzcGrKzZjOATHq8h62CQcw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "783964099613-4hp65dpq6p379bakhrquqcc0a2eor9ab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

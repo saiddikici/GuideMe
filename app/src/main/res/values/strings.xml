@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name" translatable="false">GuideMe</string>
+    <string name="login1">E-mail address</string>
+    <string name="login2">Password</string>
+    <string-array name="Genders">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+</resources>
