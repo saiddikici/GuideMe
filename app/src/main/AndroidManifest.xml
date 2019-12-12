@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme">
-        <activity android:name=".ChatActivity"
+        <activity android:name=".InboxActivity"
             android:theme="@style/Theme.AppCompat.Light"/>
         <activity android:name=".ProfileSettingsActivity" />
         <activity android:name=".SearchGuideActivity" />
