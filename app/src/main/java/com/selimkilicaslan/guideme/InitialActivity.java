@@ -15,7 +15,7 @@ public class InitialActivity extends AppCompatActivity {
     }
 
     public void loginButtonOnClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        Intent intent = new Intent(getApplicationContext(), SearchGuideActivity.class);
         startActivity(intent);
     }
 

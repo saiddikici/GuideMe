@@ -15,6 +15,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        setTitle("Chat");
 
         chatRecyclerView = findViewById(R.id.chatRecyclerView);
         ArrayList<Chat> chats = new ArrayList<>();
