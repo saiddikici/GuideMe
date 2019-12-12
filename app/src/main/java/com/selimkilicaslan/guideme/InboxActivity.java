@@ -24,8 +24,8 @@ public class InboxActivity extends AppCompatActivity {
         chats.add(new Chat("Selim Enes", messages, "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg"));
         chats.add(new Chat("Said Dikici", messages, "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg"));
 
-        InboxAdapter chatAdapter = new InboxAdapter(this, chats);
-        chatRecyclerView.setAdapter(chatAdapter);
+        InboxAdapter inboxAdapter = new InboxAdapter(this, chats);
+        chatRecyclerView.setAdapter(inboxAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Chat {
     private String SenderName;
-    private ArrayList<String> Messages;
+    private ArrayList<Message> Messages;
     private String ProfilePictureURL;
 
     public String getSenderName() {
@@ -15,11 +15,11 @@ public class Chat {
         SenderName = senderName;
     }
 
-    public ArrayList<String> getMessages() {
+    public ArrayList<Message> getMessages() {
         return Messages;
     }
 
-    public void setMessages(ArrayList<String> messages) {
+    public void setMessages(ArrayList<Message> messages) {
         Messages = messages;
     }
 
@@ -31,7 +31,10 @@ public class Chat {
         ProfilePictureURL = profilePictureURL;
     }
 
-    public Chat(String senderName, ArrayList<String> messages, String profilePictureURL) {
+    public Chat() {
+    }
+
+    public Chat(String senderName, ArrayList<Message> messages, String profilePictureURL) {
         SenderName = senderName;
         Messages = messages;
         ProfilePictureURL = profilePictureURL;

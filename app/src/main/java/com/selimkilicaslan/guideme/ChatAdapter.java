@@ -10,15 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
     Chat chat;
     LayoutInflater inflater;
 
-    public ChatAdapter(Context context, ArrayList<Chat> chatArrayList) {
+    public ChatAdapter(Context context, Chat chat) {
         inflater = LayoutInflater.from(context);
-        this.chatArrayList = chatArrayList;
+        this.chat = chat;
     }
 
 
@@ -31,14 +30,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(ChatAdapter.MyViewHolder holder, int position) {
-        Chat selectedChat = chatArrayList.get(position);
-        holder.setData(selectedChat, position);
+        Message selectedMessage = chat.getMessages().get(position);
+        holder.setData(selectedMessage, position);
 
     }
 
     @Override
     public int getItemCount() {
-        return chatArrayList.size();
+        return chat.getMessages().size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -54,13 +53,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
         }
 
-        public void setData(Chat chat, int position) {
+        public void setData(Message message, int position) {
 
-            this.chatContentTextView.setText(chat.getMessages().get(position));
-            Glide.with(receiverProfilePicture)
-                    .load(chat.getProfilePictureURL())
-                    .into(receiverProfilePicture);
-
+            this.chatContentTextView.setText(message.getMessageContent());
+            if (message.getSent()){
+                Glide.with(senderProfilePicture)
+                        .load(message.getUser().getProfilePictureURL())
+                        .into(senderProfilePicture);
+            }
+            else {
+                Glide.with(receiverProfilePicture)
+                        .load(message.getUser().getProfilePictureURL())
+                        .into(receiverProfilePicture);
+            }
 
         }
 
