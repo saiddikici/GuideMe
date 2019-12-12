@@ -92,6 +92,7 @@
                 android:layout_height="1dp"
                 android:background="@color/colorLightGray"
                 android:layout_marginTop="15dp"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,27 +102,95 @@
                     android:id="@+id/showHeaderTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="I will show you"
+                    android:text="We Will See These Places"
                     android:textStyle="bold"
-                    android:textColor="#000000"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"/>
+                    android:textColor="@color/colorBlack"
+                    android:layout_margin="15dp"/>
                 <TextView
                     android:id="@+id/showTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="I love Istanbul. I love Istanbul. I love Istanbul. I love Istanbul. I love Istanbul. I love Istanbul."
                     android:textStyle="normal"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"/>
+                    android:layout_margin="15dp"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorLightGray"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"/>
+                    android:background="@color/colorLightGray"/>
+                <TextView
+                    android:id="@+id/aboutHeaderTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="About Me"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:id="@+id/aboutTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="I was born in Istanbul and I still live in this beautiful city. I am an industrial engineer who is obsessed with marketing :)"
+                    android:textStyle="normal"
+                    android:layout_margin="15dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorLightGray"/>
+
+                <TextView
+                    android:id="@+id/languageHeaderTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Languages"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:id="@+id/languageTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Turkish\nEnglish\nSpanish"
+                    android:textStyle="normal"
+                    android:layout_margin="15dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorLightGray"/>
+
+                <TextView
+                    android:id="@+id/activitiesHeaderTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Activities"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:id="@+id/activitiesTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Translation\nShopping\nFood &amp; Restaurants\Art &amp; Museums\nHistory &amp; Culture\nExploration &amp; Sightseeing"
+                    android:textStyle="normal"
+                    android:layout_margin="15dp"/>
+
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorLightGray" />
+
+            <TextView
+                android:id="@+id/reviewHeaderTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="56 Reviews"
+                android:textStyle="bold"
+                android:layout_margin="15dp"/>
+
 
         </LinearLayout>
     </ScrollView>
