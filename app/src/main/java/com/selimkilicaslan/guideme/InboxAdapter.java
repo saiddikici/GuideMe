@@ -6,31 +6,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
-    Chat chat;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder> {
+    ArrayList<Chat> chatArrayList;
     LayoutInflater inflater;
 
-    public ChatAdapter(Context context, ArrayList<Chat> chatArrayList) {
+    public InboxAdapter(Context context, ArrayList<Chat> chatArrayList) {
         inflater = LayoutInflater.from(context);
         this.chatArrayList = chatArrayList;
     }
 
 
     @Override
-    public ChatAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.chat_list_item, parent, false);
-        ChatAdapter.MyViewHolder holder = new ChatAdapter.MyViewHolder(view);
+        MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(ChatAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
         Chat selectedChat = chatArrayList.get(position);
         holder.setData(selectedChat, position);
 
@@ -43,23 +43,24 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView chatContentTextView;
-        de.hdodenhof.circleimageview.CircleImageView senderProfilePicture, receiverProfilePicture;
+        TextView cNameTextView, chatTextView;
+        de.hdodenhof.circleimageview.CircleImageView chatProfilePicture;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            chatContentTextView = itemView.findViewById(R.id.cNameTextView);
-            receiverProfilePicture = itemView.findViewById(R.id.receiverProfilePicture);
-            senderProfilePicture = itemView.findViewById(R.id.senderProfilePicture);
+            cNameTextView = itemView.findViewById(R.id.cNameTextView);
+            chatTextView = itemView.findViewById(R.id.chatTextView);
+            chatProfilePicture = itemView.findViewById(R.id.chatProfilePicture);
 
         }
 
         public void setData(Chat chat, int position) {
 
-            this.chatContentTextView.setText(chat.getMessages().get(position));
-            Glide.with(receiverProfilePicture)
+            this.cNameTextView.setText(chat.getSenderName());
+            this.chatTextView.setText(chat.getMessages().get(chat.getMessages().size() - 1));
+            Glide.with(chatProfilePicture)
                     .load(chat.getProfilePictureURL())
-                    .into(receiverProfilePicture);
+                    .into(chatProfilePicture);
 
 
         }
