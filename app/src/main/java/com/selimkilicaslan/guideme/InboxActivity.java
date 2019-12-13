@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class InboxActivity extends AppCompatActivity {
     RecyclerView chatRecyclerView;
@@ -18,11 +20,14 @@ public class InboxActivity extends AppCompatActivity {
         setTitle("Chat");
 
         chatRecyclerView = findViewById(R.id.chatRecyclerView);
-        /*ArrayList<Chat> chats = new ArrayList<>();
-        ArrayList<String> messages = new ArrayList<>();
-        messages.add("Hello :)");
+        ArrayList<Chat> chats = new ArrayList<>();
+        ArrayList<Message> messages = new ArrayList<>();
+        User user = new User("ali","ali@ali","sifre","554", UserType.GUIDE, "https://pbs.twimg.com/media/EISSCGLXYAATGvM.jpg");
+        Date date = new Date();
+        Message message = new Message("Tahsim", user, date, true);
+        messages.add(message);
         chats.add(new Chat("Selim Enes", messages, "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg"));
-        chats.add(new Chat("Said Dikici", messages, "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg"));
+        chats.add(new Chat("Said Dikici", messages, "https://pbs.twimg.com/media/EISSCGLXYAATGvM.jpg"));
 
         InboxAdapter inboxAdapter = new InboxAdapter(this, chats);
         chatRecyclerView.setAdapter(inboxAdapter);

@@ -17,8 +17,6 @@ public class User {
         this.profilePictureURL = profilePictureURL;
     }
 
-    public User() {
-    }
 
     public String getProfilePictureURL() {
         return profilePictureURL;

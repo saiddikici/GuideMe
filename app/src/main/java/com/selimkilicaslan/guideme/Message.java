@@ -1,21 +1,18 @@
 package com.selimkilicaslan.guideme;
 
-import java.sql.Time;
+import java.util.Date;
 
 public class Message {
     private String messageContent;
     private User user;
-    private Time time;
+    private Date date;
     private Boolean isSent;
 
-    public Message(String messageContent, User user, Time time, Boolean isSent) {
+    public Message(String messageContent, User user, Date date, Boolean isSent) {
         this.messageContent = messageContent;
         this.user = user;
-        this.time = time;
+        this.date = date;
         this.isSent = isSent;
-    }
-
-    public Message() {
     }
 
     public Boolean getSent() {
@@ -42,11 +39,11 @@ public class Message {
         this.user = user;
     }
 
-    public Time getTime() {
-        return time;
+    public Date getTime() {
+        return date;
     }
 
-    public void setTime(Time time) {
-        this.time = time;
+    public void setTime(Date date) {
+        this.date = date;
     }
 }

@@ -35,7 +35,7 @@ public class InitialActivity extends MyAppCompatActivity {
     }
 
     public void registerButtonOnClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+        Intent intent = new Intent(getApplicationContext(), InboxActivity.class);
         startActivity(intent);
     }
 }
