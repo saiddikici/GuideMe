@@ -37,7 +37,7 @@
         android:layout_marginBottom="10dp"
         android:adjustViewBounds="false"
         android:scaleType="centerCrop"
-        android:src="@drawable/profilepic" />
+        android:src="@drawable/taksim_interviewer" />
 
 
 </LinearLayout>

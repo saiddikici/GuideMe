@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
     RecyclerView chatRecyclerView;
@@ -15,14 +16,45 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        chatRecyclerView = findViewById(R.id.chatRecyclerView);
+        chatRecyclerView = findViewById(R.id.chatWindowRecyclerView);
         ArrayList<Message> messages = new ArrayList<>();
-        Message message = new Message();
-        message.setMessageContent("Deneme mesajı");
+        User user = new User("ali","ali@ali","sifre","554", UserType.GUIDE, "https://i.ibb.co/4j109Mv/taksim-dayi.png");
+        Date date = new Date();
+        Message message = new Message("Hello World!", user, date, true);
+        messages.add(message);
 
-        message.setUser(new User());
-        messages.add(new Message());
-        Chat chat = new Chat("Said", messages, "https://pbs.twimg.com/media/EISSCGLXYAATGvM.jpg");
+        User user2 = new User("ali","ali@ali","sifre","554", UserType.TOURIST, "https://i.ibb.co/gM42f1L/taksim-interviewer.png");
+        Date date2 = new Date();
+        Message message2 = new Message("How are you?", user2, date2, false);
+        messages.add(message2);
+
+        Message message3 = new Message("Can I think?", user, date, true);
+        messages.add(message3);
+
+        Message message4 = new Message("Can you tell me how can I get to Taksim?", user2, date2, false);
+        messages.add(message4);
+
+        Message message5 = new Message("Taksim", user, date, true);
+        messages.add(message5);
+
+        Message message6 = new Message("You know!", user, date, true);
+        messages.add(message6);
+
+        Message message7 = new Message("How can I get to Taksim?", user2, date2, false);
+        messages.add(message7);
+
+        Message message8 = new Message("Here is Taksim", user, date, true);
+        messages.add(message8);
+
+        User user3 = new User("ali","ali@ali","sifre","554", UserType.TOURIST, "https://i.ibb.co/68zc8Jj/taksim-translator.png");
+        Date date3 = new Date();
+        Message message9 = new Message("Nasıl giderim diyor dayı!", user3, date3, false);
+        messages.add(message9);
+
+        Message message10 = new Message("I answered here", user, date, true);
+        messages.add(message10);
+
+        Chat chat = new Chat("Said", messages , "https://i.ibb.co/4j109Mv/taksim-dayi.png");
 
         ChatAdapter chatAdapter = new ChatAdapter(this, chat);
         chatRecyclerView.setAdapter(chatAdapter);

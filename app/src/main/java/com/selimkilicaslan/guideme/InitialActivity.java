@@ -15,12 +15,12 @@ public class InitialActivity extends AppCompatActivity {
     }
 
     public void loginButtonOnClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), ProfileSettingsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
         startActivity(intent);
     }
 
     public void registerButtonOnClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+        Intent intent = new Intent(getApplicationContext(), InboxActivity.class);
         startActivity(intent);
     }
 }

@@ -31,9 +31,6 @@ public class Chat {
         ProfilePictureURL = profilePictureURL;
     }
 
-    public Chat() {
-    }
-
     public Chat(String senderName, ArrayList<Message> messages, String profilePictureURL) {
         SenderName = senderName;
         Messages = messages;

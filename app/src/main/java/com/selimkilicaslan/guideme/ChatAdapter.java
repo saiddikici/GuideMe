@@ -23,7 +23,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
     @Override
     public ChatAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.chat_list_item, parent, false);
+        View view = inflater.inflate(R.layout.message_list_item, parent, false);
         ChatAdapter.MyViewHolder holder = new ChatAdapter.MyViewHolder(view);
         return holder;
     }
@@ -45,9 +45,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         TextView chatContentTextView;
         de.hdodenhof.circleimageview.CircleImageView senderProfilePicture, receiverProfilePicture;
 
+
         public MyViewHolder(View itemView) {
             super(itemView);
-            chatContentTextView = itemView.findViewById(R.id.cNameTextView);
+            chatContentTextView = itemView.findViewById(R.id.chatContentTextView);
             receiverProfilePicture = itemView.findViewById(R.id.receiverProfilePicture);
             senderProfilePicture = itemView.findViewById(R.id.senderProfilePicture);
 
@@ -60,11 +61,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
                 Glide.with(senderProfilePicture)
                         .load(message.getUser().getProfilePictureURL())
                         .into(senderProfilePicture);
+                receiverProfilePicture.setVisibility(View.GONE);
             }
             else {
                 Glide.with(receiverProfilePicture)
                         .load(message.getUser().getProfilePictureURL())
                         .into(receiverProfilePicture);
+                senderProfilePicture.setVisibility(View.GONE);
             }
 
         }
