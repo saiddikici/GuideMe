@@ -18,7 +18,7 @@ public class InboxActivity extends AppCompatActivity {
         setTitle("Chat");
 
         chatRecyclerView = findViewById(R.id.chatRecyclerView);
-        ArrayList<Chat> chats = new ArrayList<>();
+        /*ArrayList<Chat> chats = new ArrayList<>();
         ArrayList<String> messages = new ArrayList<>();
         messages.add("Hello :)");
         chats.add(new Chat("Selim Enes", messages, "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg"));
@@ -29,6 +29,6 @@ public class InboxActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        chatRecyclerView.setLayoutManager(linearLayoutManager);
+        chatRecyclerView.setLayoutManager(linearLayoutManager); */
     }
 }

@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -137,11 +138,13 @@ public class RegisterActivity extends MyAppCompatActivity {
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
                                                             Toast.makeText(getApplicationContext(), "User successfully created!", Toast.LENGTH_SHORT).show();
+                                                            finish();
                                                         }
                                                     }
                                                 });
 
                                     } else {
+                                        Toast.makeText(getApplicationContext(), "Cannot create user!", Toast.LENGTH_SHORT).show();
 
                                     }
                                 }
@@ -150,7 +153,7 @@ public class RegisterActivity extends MyAppCompatActivity {
 
 
                         } else {
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                            Toast.makeText(RegisterActivity.this, "Cannot create user!",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

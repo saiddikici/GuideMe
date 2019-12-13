@@ -1,14 +1,14 @@
 package com.selimkilicaslan.guideme;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class SearchGuideActivity extends AppCompatActivity {
+public class SearchGuideActivity extends MyAppCompatActivity {
 
     RecyclerView guidesRecyclerView;
 
@@ -16,6 +16,11 @@ public class SearchGuideActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_guide);
+
+
+        if(fUser != null){
+            Toast.makeText(getApplicationContext(), fUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+        }
 
         guidesRecyclerView = findViewById(R.id.guidesRecyclerView);
 
