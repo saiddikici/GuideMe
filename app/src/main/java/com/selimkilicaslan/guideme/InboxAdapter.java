@@ -1,24 +1,34 @@
 package com.selimkilicaslan.guideme;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.CustomViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder> {
     ArrayList<Chat> chatArrayList;
     LayoutInflater inflater;
+    Context context;
 
     public InboxAdapter(Context context, ArrayList<Chat> chatArrayList) {
         inflater = LayoutInflater.from(context);
         this.chatArrayList = chatArrayList;
+        this.context = context;
     }
 
 
@@ -54,13 +64,29 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
 
         }
 
-        public void setData(Chat chat, int position) {
+        public void setData(final Chat chat, int position) {
 
             this.cNameTextView.setText(chat.getReceiver().getUsername());
             this.chatTextView.setText(chat.getMessages().get(chat.getMessages().size() - 1).getMessageContent());
-            Glide.with(chatProfilePicture)
+            /*Glide.with(chatProfilePicture)
                     .load(chat.getReceiver().getProfilePictureURL())
-                    .into(chatProfilePicture);
+                    .into(chatProfilePicture);*/
+
+            Glide.with(context)
+                    .asBitmap()
+                    .load(chat.getReceiver().getProfilePictureURL())
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            chatProfilePicture.setImageBitmap(resource);
+                            chat.getReceiver().setBmpProfilePicture(resource);
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                        }
+                    });
 
 
         }

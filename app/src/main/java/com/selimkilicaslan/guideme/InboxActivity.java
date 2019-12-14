@@ -34,6 +34,6 @@ public class InboxActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        chatRecyclerView.setLayoutManager(linearLayoutManager); */
+        chatRecyclerView.setLayoutManager(linearLayoutManager);
     }
 }

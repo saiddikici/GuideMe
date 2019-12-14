@@ -1,16 +1,19 @@
 package com.selimkilicaslan.guideme;
 
+import android.graphics.Bitmap;
+
 public class User {
     private String username;
     private String email;
     private String password;
     private String phoneNumber;
+    private String profilePictureURL;
     private UserType userType;
+    private Bitmap bmpProfilePicture;
 
     public User() {
     }
 
-    private String profilePictureURL;
 
     public User(String username, String email, String password, String phoneNumber, UserType userType, String profilePictureURL) {
         this.username = username;
@@ -19,6 +22,14 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.userType = userType;
         this.profilePictureURL = profilePictureURL;
+    }
+
+    public Bitmap getBmpProfilePicture() {
+        return bmpProfilePicture;
+    }
+
+    public void setBmpProfilePicture(Bitmap bmpProfilePicture) {
+        this.bmpProfilePicture = bmpProfilePicture;
     }
 
 
