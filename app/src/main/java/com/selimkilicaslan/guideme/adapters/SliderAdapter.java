@@ -1,4 +1,4 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.selimkilicaslan.guideme.R;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.bumptech.glide.Glide;
 

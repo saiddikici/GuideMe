@@ -1,12 +1,11 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.ui.activities;
 
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseUser;
+import com.selimkilicaslan.guideme.R;
 
 public class InitialActivity extends MyAppCompatActivity {
 
@@ -30,7 +29,7 @@ public class InitialActivity extends MyAppCompatActivity {
     }
 
     public void loginButtonOnClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
 

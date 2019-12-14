@@ -1,4 +1,4 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.classes;
 
 import java.util.ArrayList;
 

@@ -1,10 +1,17 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+
+import com.selimkilicaslan.guideme.R;
+import com.selimkilicaslan.guideme.adapters.ChatAdapter;
+import com.selimkilicaslan.guideme.classes.Chat;
+import com.selimkilicaslan.guideme.classes.Message;
+import com.selimkilicaslan.guideme.classes.User;
+import com.selimkilicaslan.guideme.types.UserType;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,9 +1,11 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+
+import com.selimkilicaslan.guideme.R;
 
 public class ProfileSettingsActivity extends AppCompatActivity {
 

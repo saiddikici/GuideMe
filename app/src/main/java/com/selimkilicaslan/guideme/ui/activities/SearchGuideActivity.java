@@ -1,10 +1,14 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.ui.activities;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.selimkilicaslan.guideme.R;
+import com.selimkilicaslan.guideme.adapters.GuideSearchAdapter;
+import com.selimkilicaslan.guideme.classes.Guide;
 
 import java.util.ArrayList;
 
