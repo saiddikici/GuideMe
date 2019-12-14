@@ -54,7 +54,7 @@ public class SearchGuideActivity extends AppCompatActivity {
         said.setPricePerHour(1);
         said.setReviewCount(1);
         said.setRating(1);
-        said.setProfilePictureURL("https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg");
+        said.setProfilePictureURL("https://i.ibb.co/4j109Mv/taksim-dayi.png");
         guides.add(said);
 
         GuideSearchAdapter guideSearchAdapter = new GuideSearchAdapter(this, guides);

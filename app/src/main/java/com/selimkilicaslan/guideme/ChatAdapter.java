@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,6 +45,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
         TextView chatContentTextView;
         de.hdodenhof.circleimageview.CircleImageView senderProfilePicture, receiverProfilePicture;
+        EditText messageInputEditText;
 
 
         public MyViewHolder(View itemView) {
@@ -51,6 +53,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
             chatContentTextView = itemView.findViewById(R.id.chatContentTextView);
             receiverProfilePicture = itemView.findViewById(R.id.receiverProfilePicture);
             senderProfilePicture = itemView.findViewById(R.id.senderProfilePicture);
+            messageInputEditText = itemView.findViewById(R.id.messageInputEditText);
 
         }
 

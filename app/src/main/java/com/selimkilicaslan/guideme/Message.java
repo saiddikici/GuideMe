@@ -27,6 +27,9 @@ public class Message {
         return messageContent;
     }
 
+    public Message() {
+    }
+
     public void setMessageContent(String messageContent) {
         this.messageContent = messageContent;
     }
