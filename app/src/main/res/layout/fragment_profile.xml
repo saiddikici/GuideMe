@@ -31,14 +31,15 @@
             android:background="@color/colorGray" />
 
         <LinearLayout
+            android:id="@+id/generalInfoLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
             android:layout_gravity="center"
             android:background="@color/colorWhite"
             android:elevation="5dp"
-            android:onClick="generalInfoOnclick">
+            android:onClick="generalInfoOnclick"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <ImageView
                 android:id="@+id/generalInfoImageView"
@@ -53,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="General information"
-                android:textColor="@color/colorBlack"/>
+                android:textColor="@color/colorBlack" />
 
             <TextView
                 android:id="@+id/generalInfoTextView"
@@ -76,14 +77,15 @@
             android:background="@color/colorGray" />
 
         <LinearLayout
+            android:id="@+id/localHostInfoLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
             android:layout_gravity="center"
             android:background="@color/colorWhite"
             android:elevation="5dp"
-            android:onClick="LocalHostInfoOnClick">
+            android:onClick="LocalHostInfoOnClick"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <ImageView
                 android:id="@+id/LocalHostInfoImageView"
@@ -98,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Local host information"
-                android:textColor="@color/colorBlack"/>
+                android:textColor="@color/colorBlack" />
 
             <TextView
                 android:id="@+id/localHostInfoTextView"
@@ -121,14 +123,15 @@
             android:background="@color/colorGray" />
 
         <LinearLayout
+            android:id="@+id/contactIdLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
             android:layout_gravity="center"
             android:background="@color/colorWhite"
             android:elevation="5dp"
-            android:onClick="ContactIdOnClick">
+            android:onClick="ContactIdOnClick"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <ImageView
                 android:id="@+id/ContactIdImageView"
@@ -143,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Contact &amp; Identification"
-                android:textColor="@color/colorBlack"/>
+                android:textColor="@color/colorBlack" />
 
             <TextView
                 android:id="@+id/ContactIdTextView"
