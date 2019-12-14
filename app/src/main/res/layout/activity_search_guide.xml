@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/colorGray"
     tools:context=".SearchGuideActivity">
 
     <EditText
@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/edittextbackground"
+        android:background="@drawable/edittext_background"
         android:ems="10"
         android:hint="Type a city"
         android:inputType="textPersonName"
