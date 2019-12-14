@@ -58,10 +58,10 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
 
         public void setData(Chat chat, int position) {
 
-            this.cNameTextView.setText(chat.getSenderName());
+            this.cNameTextView.setText(chat.getReceiver().getUsername());
             this.chatTextView.setText(chat.getMessages().get(chat.getMessages().size() - 1).getMessageContent());
             Glide.with(chatProfilePicture)
-                    .load(chat.getProfilePictureURL())
+                    .load(chat.getReceiver().getProfilePictureURL())
                     .into(chatProfilePicture);
 
 

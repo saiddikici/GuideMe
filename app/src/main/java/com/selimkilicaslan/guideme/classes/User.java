@@ -8,6 +8,10 @@ public class User {
     private String password;
     private String phoneNumber;
     private UserType userType;
+
+    public User() {
+    }
+
     private String profilePictureURL;
 
     public User(String username, String email, String password, String phoneNumber, UserType userType, String profilePictureURL) {
