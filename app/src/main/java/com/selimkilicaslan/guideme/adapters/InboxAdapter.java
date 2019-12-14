@@ -1,8 +1,9 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,9 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.CustomViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.selimkilicaslan.guideme.R;
+import com.selimkilicaslan.guideme.classes.Chat;
+import com.selimkilicaslan.guideme.ui.activities.ChatActivity;
 
 import java.util.ArrayList;
 
@@ -31,11 +35,11 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
         this.context = context;
     }
 
-
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.chat_list_item, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
+        view.setOnClickListener(holder);
         return holder;
     }
 
@@ -58,6 +62,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
             cNameTextView = itemView.findViewById(R.id.cNameTextView);
             chatTextView = itemView.findViewById(R.id.chatTextView);
             chatProfilePicture = itemView.findViewById(R.id.chatProfilePicture);
@@ -95,6 +100,10 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
         @Override
         public void onClick(View v) {
 
+            int position = this.getAdapterPosition();
+
+            Intent intent = new Intent(context, ChatActivity.class);
+            context.startActivity(intent);
 
         }
 

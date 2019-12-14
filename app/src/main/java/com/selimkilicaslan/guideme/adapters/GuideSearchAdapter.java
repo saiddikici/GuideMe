@@ -1,4 +1,4 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.selimkilicaslan.guideme.R;
+import com.selimkilicaslan.guideme.classes.Guide;
 
 import java.util.ArrayList;
 

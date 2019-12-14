@@ -1,28 +1,44 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.ui.fragments;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.selimkilicaslan.guideme.R;
+import com.selimkilicaslan.guideme.adapters.GuideSearchAdapter;
+import com.selimkilicaslan.guideme.adapters.InboxAdapter;
+import com.selimkilicaslan.guideme.classes.Chat;
+import com.selimkilicaslan.guideme.classes.Guide;
+import com.selimkilicaslan.guideme.classes.Message;
+import com.selimkilicaslan.guideme.classes.User;
+import com.selimkilicaslan.guideme.types.UserType;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-
-public class SearchGuideActivity extends MyAppCompatActivity {
+public class SearchGuideFragment extends Fragment {
 
     RecyclerView guidesRecyclerView;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_guide);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        View root = inflater.inflate(R.layout.fragment_search_guide, container, false);
 
-        if(fUser != null){
-            Toast.makeText(getApplicationContext(), fUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-        }
+        //if(fUser != null){
+        //    Toast.makeText(root.getContext(), fUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+        //}
 
-        guidesRecyclerView = findViewById(R.id.guidesRecyclerView);
+        guidesRecyclerView = root.findViewById(R.id.guidesRecyclerView);
 
         ArrayList<Guide> guides = new ArrayList<>();
 
@@ -62,11 +78,13 @@ public class SearchGuideActivity extends MyAppCompatActivity {
         said.setProfilePictureURL("https://i.ibb.co/4j109Mv/taksim-dayi.png");
         guides.add(said);
 
-        GuideSearchAdapter guideSearchAdapter = new GuideSearchAdapter(this, guides);
+        GuideSearchAdapter guideSearchAdapter = new GuideSearchAdapter(root.getContext(), guides);
         guidesRecyclerView.setAdapter(guideSearchAdapter);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(root.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         guidesRecyclerView.setLayoutManager(linearLayoutManager);
+
+        return root;
     }
 }

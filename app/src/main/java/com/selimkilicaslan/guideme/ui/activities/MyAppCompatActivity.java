@@ -1,4 +1,4 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.ui.activities;
 
 import android.os.Bundle;
 

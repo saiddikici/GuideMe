@@ -1,4 +1,6 @@
-package com.selimkilicaslan.guideme;
+package com.selimkilicaslan.guideme.classes;
+
+import com.selimkilicaslan.guideme.types.UserType;
 
 import android.graphics.Bitmap;
 
