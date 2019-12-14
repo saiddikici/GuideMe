@@ -13,7 +13,7 @@ public class InitialActivity extends MyAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(fUser != null){
-            Intent intent = new Intent(getApplicationContext(), SearchGuideActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
         setContentView(R.layout.activity_initial);

@@ -3,7 +3,6 @@ package com.selimkilicaslan.guideme.ui.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.selimkilicaslan.guideme.R;
 
@@ -15,12 +14,4 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_settings);
     }
 
-    public void generalInfoOnclick(View view) {
-    }
-
-    public void LocalHostInfoOnClick(View view) {
-    }
-
-    public void ContactIdOnClick(View view) {
-    }
 }

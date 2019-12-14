@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.selimkilicaslan.guideme.R;
+import com.selimkilicaslan.guideme.adapters.InboxAdapter;
 import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.Message;
 import com.selimkilicaslan.guideme.classes.User;

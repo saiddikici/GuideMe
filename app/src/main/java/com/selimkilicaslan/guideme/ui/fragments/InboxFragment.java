@@ -10,7 +10,7 @@ import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.Message;
 import com.selimkilicaslan.guideme.classes.User;
 import com.selimkilicaslan.guideme.types.UserType;
-import com.selimkilicaslan.guideme.ui.activities.InboxAdapter;
+import com.selimkilicaslan.guideme.adapters.InboxAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,12 +34,13 @@ public class InboxFragment extends Fragment {
         chatRecyclerView = root.findViewById(R.id.chatRecyclerView);
         ArrayList<Chat> chats = new ArrayList<>();
         ArrayList<Message> messages = new ArrayList<>();
-        User user = new User("ali","ali@ali","sifre","554", UserType.GUIDE, "https://pbs.twimg.com/media/EISSCGLXYAATGvM.jpg");
+        User user = new User("ali","ali@ali","sifre","554", UserType.GUIDE, "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg");
+        User user1 = new User("ali","ali@ali","sifre","554", UserType.GUIDE, "https://pbs.twimg.com/media/EISSCGLXYAATGvM.jpg");
         Date date = new Date();
         Message message = new Message("Tahsim", user, date, true);
         messages.add(message);
-        chats.add(new Chat("Selim Enes", messages, "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg"));
-        chats.add(new Chat("Said Dikici", messages, "https://pbs.twimg.com/media/EISSCGLXYAATGvM.jpg"));
+        chats.add(new Chat(user, messages));
+        chats.add(new Chat(user1, messages));
 
         InboxAdapter inboxAdapter = new InboxAdapter(root.getContext(), chats);
         chatRecyclerView.setAdapter(inboxAdapter);
