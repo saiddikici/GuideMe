@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.classes.User;
+import com.selimkilicaslan.guideme.types.Gender;
 import com.selimkilicaslan.guideme.types.UserType;
 
 public class GeneralInfoActivity extends AppCompatActivity {
@@ -16,7 +17,7 @@ public class GeneralInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_general_info);
 
-        User user = new User("said", "said@said", "asdf", "1234", UserType.GUIDE, "https://i.ibb.co/4j109Mv/taksim-dayi.png");
+        User user = new User("said", "said@said", "asdf", "1234","https://i.ibb.co/4j109Mv/taksim-dayi.png", UserType.GUIDE, Gender.MALE);
     }
 
     public void saveButtonOnClick(View view) {
