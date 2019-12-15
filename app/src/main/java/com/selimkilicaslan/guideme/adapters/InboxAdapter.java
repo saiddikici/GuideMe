@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.CustomViewTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.classes.Chat;
@@ -37,7 +35,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.chat_list_item, parent, false);
+        View view = inflater.inflate(R.layout.list_item_chat, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         view.setOnClickListener(holder);
         return holder;

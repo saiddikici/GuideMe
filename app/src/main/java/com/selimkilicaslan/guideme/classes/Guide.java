@@ -1,100 +1,100 @@
 package com.selimkilicaslan.guideme.classes;
 
 public class Guide {
-    private String Name;
-    private String Gender;
-    private String City;
-    private String Country;
-    private String Quote;
-    private String ProfilePictureURL;
-    private int ReviewCount;
-    private int PricePerHour;
-    private float Rating;
+    private String name;
+    private String gender;
+    private String city;
+    private String country;
+    private String quote;
+    private String profilePictureURL;
+    private int reviewCount;
+    private int pricePerHour;
+    private float rating;
 
     public Guide() {
     }
 
     public Guide(String name, String gender, String city, String country, int reviewCount, float rating, String quote, int pricePerHour, String profilePictureURL) {
-        Name = name;
-        Gender = gender;
-        City = city;
-        Country = country;
-        ReviewCount = reviewCount;
-        Rating = rating;
-        Quote = quote;
-        PricePerHour = pricePerHour;
-        ProfilePictureURL = profilePictureURL;
+        this.name = name;
+        this.gender = gender;
+        this.city = city;
+        this.country = country;
+        this.reviewCount = reviewCount;
+        this.rating = rating;
+        this.quote = quote;
+        this.pricePerHour = pricePerHour;
+        this.profilePictureURL = profilePictureURL;
     }
 
     public String getProfilePictureURL() {
-        return ProfilePictureURL;
+        return profilePictureURL;
     }
 
     public void setProfilePictureURL(String profilePictureURL) {
-        ProfilePictureURL = profilePictureURL;
+        this.profilePictureURL = profilePictureURL;
     }
 
     public int getPricePerHour() {
-        return PricePerHour;
+        return pricePerHour;
     }
 
     public void setPricePerHour(int pricePerHour) {
-        PricePerHour = pricePerHour;
+        this.pricePerHour = pricePerHour;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getGender() {
-        return Gender;
+        return gender;
     }
 
     public void setGender(String gender) {
-        Gender = gender;
+        this.gender = gender;
     }
 
     public String getCity() {
-        return City;
+        return city;
     }
 
     public void setCity(String city) {
-        City = city;
+        this.city = city;
     }
 
     public String getCountry() {
-        return Country;
+        return country;
     }
 
     public void setCountry(String country) {
-        Country = country;
+        this.country = country;
     }
 
     public int getReviewCount() {
-        return ReviewCount;
+        return reviewCount;
     }
 
     public void setReviewCount(int reviewCount) {
-        ReviewCount = reviewCount;
+        this.reviewCount = reviewCount;
     }
 
     public float getRating() {
-        return Rating;
+        return rating;
     }
 
     public void setRating(float rating) {
-        Rating = rating;
+        this.rating = rating;
     }
 
     public String getQuote() {
-        return Quote;
+        return quote;
     }
 
     public void setQuote(String quote) {
-        Quote = quote;
+        this.quote = quote;
     }
 }
