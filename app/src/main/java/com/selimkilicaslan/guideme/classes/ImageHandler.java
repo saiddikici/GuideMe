@@ -1,4 +1,4 @@
-package com.selimkilicaslan.guideme.ui.activities;
+package com.selimkilicaslan.guideme.classes;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -9,6 +9,7 @@ import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.Message;
 import com.selimkilicaslan.guideme.classes.User;
+import com.selimkilicaslan.guideme.types.Gender;
 import com.selimkilicaslan.guideme.types.UserType;
 import com.selimkilicaslan.guideme.adapters.InboxAdapter;
 
@@ -34,8 +35,8 @@ public class InboxFragment extends Fragment {
         chatRecyclerView = root.findViewById(R.id.chatRecyclerView);
         ArrayList<Chat> chats = new ArrayList<>();
         ArrayList<Message> messages = new ArrayList<>();
-        User user = new User("ali","ali@ali","sifre","554", UserType.GUIDE, "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg");
-        User user1 = new User("ali","ali@ali","sifre","554", UserType.GUIDE, "https://pbs.twimg.com/media/EISSCGLXYAATGvM.jpg");
+        User user = new User("ali","ali@ali","554", "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg", UserType.GUIDE, Gender.MALE);
+        User user1 = new User("ali","ali@ali","554", "https://pbs.twimg.com/media/EISSCGLXYAATGvM.jpg", UserType.GUIDE, Gender.MALE);
         Date date = new Date();
         Message message = new Message("Tahsim", user, date, true);
         messages.add(message);

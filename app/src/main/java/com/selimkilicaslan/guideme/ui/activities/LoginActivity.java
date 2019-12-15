@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.selimkilicaslan.guideme.R;
+import com.selimkilicaslan.guideme.classes.MyAppCompatActivity;
 
 public class LoginActivity extends MyAppCompatActivity {
 
@@ -38,8 +39,7 @@ public class LoginActivity extends MyAppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(), SearchGuideActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
 
                         } else {

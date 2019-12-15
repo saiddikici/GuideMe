@@ -34,8 +34,8 @@ public class SearchGuideFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_search_guide, container, false);
 
-        //if(fUser != null){
-        //    Toast.makeText(root.getContext(), fUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+        //if(mUser != null){
+        //    Toast.makeText(root.getContext(), mUser.getDisplayName(), Toast.LENGTH_SHORT).show();
         //}
 
         guidesRecyclerView = root.findViewById(R.id.guidesRecyclerView);

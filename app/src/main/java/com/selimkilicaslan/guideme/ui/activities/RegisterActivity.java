@@ -24,13 +24,22 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.selimkilicaslan.guideme.R;
+import com.selimkilicaslan.guideme.classes.ImageHandler;
+import com.selimkilicaslan.guideme.classes.MyAppCompatActivity;
+import com.selimkilicaslan.guideme.classes.User;
+import com.selimkilicaslan.guideme.types.Gender;
+import com.selimkilicaslan.guideme.types.UserType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -49,6 +58,8 @@ public class RegisterActivity extends MyAppCompatActivity {
 
     Spinner genderSpinner;
     String Filename;
+
+    User newUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,21 +86,26 @@ public class RegisterActivity extends MyAppCompatActivity {
 
     public void registerButtonOnClick(View view) {
 
-        final String name, email, password, phone, gender, userType;
-
+        final String name, email, password, phone;
+        final UserType userType;
+        final Gender gender;
         name = nameEditText.getText().toString();
         email = emailEditText.getText().toString();
         password = passwordEditText.getText().toString();
         phone = phoneEditText.getText().toString();
         if (genderSpinner.getSelectedItemPosition() == 0)
-            gender = "M";
-        else gender = "F";
+            gender = Gender.MALE;
+        else gender = Gender.FEMALE;
 
-        if (radioGroup.getCheckedRadioButtonId() == touristRadioButton.getId()) userType = "T";
-        else userType = "G";
+        if (radioGroup.getCheckedRadioButtonId() == touristRadioButton.getId()) userType = UserType.TOURIST;
+        else userType = UserType.GUIDE;
 
-
-
+        newUser = new User();
+        newUser.setEmail(email);
+        newUser.setGender(gender);
+        newUser.setPhoneNumber(phone);
+        newUser.setUsername(name);
+        newUser.setUserType(userType);
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -98,9 +114,10 @@ public class RegisterActivity extends MyAppCompatActivity {
                         if (task.isSuccessful()) {
                             final FirebaseUser user = mAuth.getCurrentUser();
 
-                            StorageReference storageRef = storage.getReference();
+                            StorageReference storageRef = mStorage.getReference();
                             StorageReference imagesRef = storageRef.child("images");
                             StorageReference userImagesRef = imagesRef.child(user.getUid());
+                            newUser.setUserID(user.getUid());
                             String imageUUID = UUID.randomUUID().toString();
                             String imageName = imageUUID + ".jpg";
                             final StorageReference newImageRef = userImagesRef.child(imageName);
@@ -124,6 +141,7 @@ public class RegisterActivity extends MyAppCompatActivity {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
                                         Uri downloadUri = task.getResult();
+                                        newUser.setProfilePictureURL(downloadUri.toString());
                                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                                 .setDisplayName(name)
                                                 .setPhotoUri(downloadUri)
@@ -134,6 +152,7 @@ public class RegisterActivity extends MyAppCompatActivity {
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
                                                             Toast.makeText(getApplicationContext(), "User successfully created!", Toast.LENGTH_SHORT).show();
+                                                            addUserToDatabase();
                                                             finish();
                                                         }
                                                     }
@@ -146,8 +165,6 @@ public class RegisterActivity extends MyAppCompatActivity {
                                 }
                             });
 
-
-
                         } else {
                             Toast.makeText(RegisterActivity.this, "Cannot create user!",
                                     Toast.LENGTH_SHORT).show();
@@ -155,6 +172,24 @@ public class RegisterActivity extends MyAppCompatActivity {
                     }
                 });
 
+    }
+
+    public void addUserToDatabase(){
+        mDatabase.collection("users")
+                .document(newUser.getUserID())
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void profileImageOnClick(View view) {
@@ -170,7 +205,6 @@ public class RegisterActivity extends MyAppCompatActivity {
             startActivityForResult(i, RESULT_LOAD_IMAGE);
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
