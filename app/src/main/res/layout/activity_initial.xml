@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/registerButton"
+        android:id="@+id/saveProfileChangesButton"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
@@ -39,7 +39,7 @@
         android:id="@+id/imageView"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        app:layout_constraintBottom_toTopOf="@+id/registerButton"
+        app:layout_constraintBottom_toTopOf="@+id/saveProfileChangesButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

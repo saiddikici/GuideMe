@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.RegisterActivity"
-    android:background="@color/colorBackground">
-
+    tools:context=".ui.activities.GeneralInfoActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImageView"
@@ -18,7 +16,7 @@
         android:elevation="10dp"
         android:onClick="profileImageOnClick"
         android:scaleType="centerCrop"
-        android:src="@drawable/profilepic"
+        android:src="@drawable/taksim_dayi"
         app:civ_border_color="#FFFFFF"
         app:civ_border_width="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,6 +30,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:clickable="false"
         android:ems="10"
         android:hint="@string/login1"
         android:inputType="textEmailAddress"
@@ -47,12 +46,42 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="@string/login2"
+        android:hint="Current Password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/emailEditText"
-        app:layout_constraintStart_toStartOf="@+id/emailEditText"
-        app:layout_constraintTop_toBottomOf="@+id/genderSpinner"
+        app:layout_constraintEnd_toEndOf="@+id/phoneEditText"
+        app:layout_constraintStart_toStartOf="@+id/phoneEditText"
+        app:layout_constraintTop_toBottomOf="@+id/phoneEditText"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/newPasswordEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="New Password"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/currentPasswordEditText"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/currentPasswordEditText"
+        app:layout_constraintTop_toBottomOf="@+id/currentPasswordEditText"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/confirmNewPasswordEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Confirm New Password"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/newPasswordEditText"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/newPasswordEditText"
+        app:layout_constraintTop_toBottomOf="@+id/newPasswordEditText"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -60,12 +89,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:onClick="registerButtonOnClick"
-        android:text="REGISTER"
+        android:onClick="saveButtonOnClick"
+        android:text="SAVE"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/currentPasswordEditText"
-        app:layout_constraintStart_toStartOf="@+id/currentPasswordEditText"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        app:layout_constraintEnd_toEndOf="@+id/confirmNewPasswordEditText"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/confirmNewPasswordEditText"
+        app:layout_constraintTop_toBottomOf="@+id/confirmNewPasswordEditText"
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
@@ -95,44 +125,5 @@
         app:layout_constraintStart_toStartOf="@+id/emailEditText"
         app:layout_constraintTop_toBottomOf="@+id/emailEditText"
         app:layout_constraintVertical_bias="0.0" />
-
-    <Spinner
-        android:id="@+id/genderSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/phoneEditText"
-        app:layout_constraintStart_toStartOf="@+id/phoneEditText"
-        app:layout_constraintTop_toBottomOf="@+id/phoneEditText"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/currentPasswordEditText"
-        app:layout_constraintStart_toStartOf="@+id/currentPasswordEditText"
-        app:layout_constraintTop_toBottomOf="@+id/currentPasswordEditText"
-        app:layout_constraintVertical_bias="0.0">
-
-        <RadioButton
-            android:id="@+id/touristRadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:checked="true"
-            android:text="Tourist" />
-
-        <RadioButton
-            android:id="@+id/guideRadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Guide" />
-    </RadioGroup>
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
