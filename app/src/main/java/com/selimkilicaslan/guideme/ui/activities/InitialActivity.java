@@ -29,7 +29,7 @@ public class InitialActivity extends MyAppCompatActivity {
     }
 
     public void loginButtonOnClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
     }
 

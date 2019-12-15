@@ -30,7 +30,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.selimkilicaslan.guideme.R;
@@ -74,7 +73,7 @@ public class RegisterActivity extends MyAppCompatActivity {
         radioGroup = findViewById(R.id.radioGroup);
         touristRadioButton = findViewById(R.id.touristRadioButton);
         guideRadioButton = findViewById(R.id.guideRadioButton);
-        profileImageView = findViewById(R.id.generalInfoProfiileImageView);
+        profileImageView = findViewById(R.id.generalInfoProfileImageView);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.Genders, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -245,7 +244,7 @@ public class RegisterActivity extends MyAppCompatActivity {
                 bitmap = null;
                 e.printStackTrace();
             }
-            ImageView imageButton = findViewById(R.id.generalInfoProfiileImageView);
+            ImageView imageButton = findViewById(R.id.generalInfoProfileImageView);
             imageButton.setImageBitmap(bitmap);
             cursor.close();
 
