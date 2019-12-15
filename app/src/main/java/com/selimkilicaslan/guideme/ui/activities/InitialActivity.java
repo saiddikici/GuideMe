@@ -6,19 +6,19 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.selimkilicaslan.guideme.R;
+import com.selimkilicaslan.guideme.classes.MyAppCompatActivity;
 
 public class InitialActivity extends MyAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(fUser != null){
+        if(mUser != null){
+
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
         setContentView(R.layout.activity_initial);
-
-
 
     }
 
@@ -34,7 +34,7 @@ public class InitialActivity extends MyAppCompatActivity {
     }
 
     public void registerButtonOnClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), InboxActivity.class);
+        Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
         startActivity(intent);
     }
 }

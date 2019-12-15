@@ -13,6 +13,7 @@ import com.selimkilicaslan.guideme.adapters.ChatAdapter;
 import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.Message;
 import com.selimkilicaslan.guideme.classes.User;
+import com.selimkilicaslan.guideme.types.Gender;
 import com.selimkilicaslan.guideme.types.UserType;
 
 import java.util.ArrayList;
@@ -38,8 +39,8 @@ public class ChatActivity extends AppCompatActivity {
         chatRecyclerView = findViewById(R.id.chatWindowRecyclerView);
         messageInputEditText = findViewById(R.id.messageInputEditText);
         messages = new ArrayList<>();
-        user = new User("ali","ali@ali","sifre","554", UserType.GUIDE, "https://i.ibb.co/4j109Mv/taksim-dayi.png");
-        user2 = new User("ali","ali@ali","sifre","554", UserType.TOURIST, "https://i.ibb.co/gM42f1L/taksim-interviewer.png");
+        user = new User("ali","ali@ali","554", "https://i.ibb.co/4j109Mv/taksim-dayi.png", UserType.GUIDE, Gender.MALE);
+        user2 = new User("ali","ali@ali","554", "https://i.ibb.co/gM42f1L/taksim-interviewer.png", UserType.TOURIST, Gender.FEMALE);
 
 
 

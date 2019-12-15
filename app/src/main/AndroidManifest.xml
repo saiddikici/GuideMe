@@ -17,11 +17,6 @@
             android:name=".ui.activities.MainActivity"
             android:label="@string/title_activity_main"></activity>
         <activity android:name=".ui.activities.ChatActivity" />
-        <activity
-            android:name=".ui.activities.InboxActivity"
-            android:theme="@style/Theme.AppCompat.Light" />
-        <activity android:name=".ui.activities.ProfileSettingsActivity" />
-        <activity android:name=".ui.activities.SearchGuideActivity" />
         <activity android:name=".ui.activities.GuideDetailsActivity" />
         <activity android:name=".ui.activities.RegisterActivity" />
         <activity android:name=".ui.activities.LoginActivity" />

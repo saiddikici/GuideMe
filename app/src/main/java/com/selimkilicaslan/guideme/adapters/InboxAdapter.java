@@ -84,7 +84,6 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                             chatProfilePicture.setImageBitmap(resource);
-                            chat.getReceiver().setBmpProfilePicture(resource);
                         }
 
                         @Override

@@ -1,39 +1,54 @@
 package com.selimkilicaslan.guideme.classes;
 
+import com.selimkilicaslan.guideme.types.Gender;
 import com.selimkilicaslan.guideme.types.UserType;
 
-import android.graphics.Bitmap;
-
 public class User {
+    private String userID;
     private String username;
     private String email;
-    private String password;
     private String phoneNumber;
     private String profilePictureURL;
     private UserType userType;
-    private Bitmap bmpProfilePicture;
+    private Gender gender;
 
     public User() {
     }
 
-
-    public User(String username, String email, String password, String phoneNumber, UserType userType, String profilePictureURL) {
+    public User(String username, String email, String phoneNumber, String profilePictureURL, UserType userType, Gender gender) {
         this.username = username;
         this.email = email;
-        this.password = password;
         this.phoneNumber = phoneNumber;
-        this.userType = userType;
         this.profilePictureURL = profilePictureURL;
+        this.userType = userType;
+        this.gender = gender;
     }
 
-    public Bitmap getBmpProfilePicture() {
-        return bmpProfilePicture;
+    public User(String userID, String username, String email, String phoneNumber, String profilePictureURL, UserType userType, Gender gender) {
+        this.userID = userID;
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.profilePictureURL = profilePictureURL;
+        this.userType = userType;
+        this.gender = gender;
     }
 
-    public void setBmpProfilePicture(Bitmap bmpProfilePicture) {
-        this.bmpProfilePicture = bmpProfilePicture;
+    public String getUserID() {
+        return userID;
     }
 
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
 
     public String getProfilePictureURL() {
         return profilePictureURL;
@@ -57,14 +72,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getPhoneNumber() {
