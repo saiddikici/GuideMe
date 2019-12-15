@@ -161,7 +161,7 @@
                     android:background="@color/colorGray"/>
 
                 <TextView
-                    android:id="@+id/activitiesHeaderTextView"
+                    android:id="@+id/servicesHeaderTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Activities"
@@ -169,7 +169,7 @@
                     android:textColor="@color/colorBlack"
                     android:layout_margin="15dp"/>
                 <TextView
-                    android:id="@+id/activitiesTextView"
+                    android:id="@+id/servicesTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Translation\nShopping\nFood &amp; Restaurants\Art &amp; Museums\nHistory &amp; Culture\nExploration &amp; Sightseeing"
