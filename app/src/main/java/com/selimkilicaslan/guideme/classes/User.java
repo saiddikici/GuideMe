@@ -16,14 +16,16 @@ public class User {
     private String city;
     private String country;
     private String quote;
+    private String about;
     private UserType userType;
     private Gender gender;
     private List<Date> availableDates;
     private int reviewCount;
-    private int pricePerHour;
+    private int pricePerDay;
     private float rating;
     private ArrayList<ServiceOffered> servicesOffered;
     private ArrayList<LanguageOffered> languages;
+    private ArrayList<String> pictureURLs;
 
     public User() {
     }
@@ -45,6 +47,22 @@ public class User {
         this.profilePictureURL = profilePictureURL;
         this.userType = userType;
         this.gender = gender;
+    }
+
+    public ArrayList<String> getPictureURLs() {
+        return pictureURLs;
+    }
+
+    public void setPictureURLs(ArrayList<String> pictureURLs) {
+        this.pictureURLs = pictureURLs;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     public ArrayList<LanguageOffered> getLanguages() {
@@ -95,12 +113,12 @@ public class User {
         this.reviewCount = reviewCount;
     }
 
-    public int getPricePerHour() {
-        return pricePerHour;
+    public int getPricePerDay() {
+        return pricePerDay;
     }
 
-    public void setPricePerHour(int pricePerHour) {
-        this.pricePerHour = pricePerHour;
+    public void setPricePerDay(int pricePerDay) {
+        this.pricePerDay = pricePerDay;
     }
 
     public float getRating() {

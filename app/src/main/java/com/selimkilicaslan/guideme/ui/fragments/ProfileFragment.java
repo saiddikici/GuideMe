@@ -26,6 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.classes.MyFragment;
 import com.selimkilicaslan.guideme.classes.User;
+import com.selimkilicaslan.guideme.types.UserType;
+import com.selimkilicaslan.guideme.ui.activities.AboutActivity;
 import com.selimkilicaslan.guideme.ui.activities.DatePickerActivity;
 import com.selimkilicaslan.guideme.ui.activities.GeneralInfoActivity;
 import com.selimkilicaslan.guideme.ui.activities.LanguagesActivity;
@@ -40,28 +42,31 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class ProfileFragment extends MyFragment {
 
     private LinearLayout generalInfoLinearLayout;
     private LinearLayout availableDatesLinearLayout;
-    private LinearLayout contactIdLinearLayout;
     private LinearLayout cityLinearLayout;
     private LinearLayout servicesLinearLayout;
     private LinearLayout languagesLinearLayout;
+    private LinearLayout aboutLinearLayout;
 
     private View root;
-    private ImageView generalInfoImageView;
     private ImageView availableDatesImageView;
     private ImageView cityImageView;
     private ImageView servicesImageView;
     private ImageView languagesImageView;
+    private ImageView aboutImageView;
 
     private TextView cityTextView;
     private TextView availableDatesTextView;
     private TextView servicesTextView;
     private TextView languagesTextView;
+    private TextView aboutTextView;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -76,21 +81,24 @@ public class ProfileFragment extends MyFragment {
 
         generalInfoLinearLayout = root.findViewById(R.id.generalInfoLinearLayout);
         availableDatesLinearLayout = root.findViewById(R.id.availableDatesLinearLayout);
-        contactIdLinearLayout = root.findViewById(R.id.contactIdLinearLayout);
         cityLinearLayout = root.findViewById(R.id.cityLinearLayout);
         servicesLinearLayout = root.findViewById(R.id.servicesLinearLayout);
         languagesLinearLayout = root.findViewById(R.id.languagesLinearLayout);
+        aboutLinearLayout = root.findViewById(R.id.aboutLinearLayout);
 
         availableDatesImageView = root.findViewById(R.id.availableDatesImageView);
         cityImageView = root.findViewById(R.id.cityImageView);
         servicesImageView = root.findViewById(R.id.servicesImageView);
         languagesImageView = root.findViewById(R.id.languagesImageView);
+        aboutImageView = root.findViewById(R.id.aboutImageView);
 
         availableDatesTextView = root.findViewById(R.id.availableDatesTextView);
         cityTextView = root.findViewById(R.id.cityTextView);
         servicesTextView = root.findViewById(R.id.servicesTextView);
         languagesTextView = root.findViewById(R.id.languagesTextView);
+        aboutTextView = root.findViewById(R.id.aboutTextView);
 
+        updateGuideUI(GONE);
 
         generalInfoLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,13 +114,6 @@ public class ProfileFragment extends MyFragment {
             }
         });
 
-        contactIdLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                contactIdOnClick(v);
-            }
-        });
-
         cityLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,15 +123,22 @@ public class ProfileFragment extends MyFragment {
 
         servicesLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                servicesOnClick(view);
+            public void onClick(View v) {
+                servicesOnClick(v);
             }
         });
 
         languagesLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                languagesOnClick(view);
+            public void onClick(View v) {
+                languagesOnClick(v);
+            }
+        });
+
+        aboutLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aboutOnClick(v);
             }
         });
 
@@ -148,35 +156,13 @@ public class ProfileFragment extends MyFragment {
                     if (snapshot != null && snapshot.exists()) {
                         Log.d(TAG, "Current data: " + snapshot.getData());
                         User user = snapshot.toObject(User.class);
-                        if(user.getAvailableDates() != null){
-                            availableDatesImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
-                            availableDatesTextView.setText("");
+                        if(user.getUserType() == UserType.GUIDE) {
+                            updateGuideUI(VISIBLE);
+                            checkAndUpdate(user);
+                        } else if (user.getUserType() == UserType.TOURIST) {
+                            updateGuideUI(GONE);
+                        }
 
-                        } else {
-                            availableDatesImageView.setImageResource(R.drawable.ic_error_orange_24dp);
-                            availableDatesTextView.setText("Missing");
-                        }
-                        if(user.getCity() != null) {
-                            cityImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
-                            cityTextView.setText(user.getCity());
-                        } else {
-                            cityImageView.setImageResource(R.drawable.ic_error_orange_24dp);
-                            cityTextView.setText("");
-                        }
-                        if(user.getServicesOffered() != null) {
-                            servicesImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
-                            servicesTextView.setText("");
-                        } else {
-                            servicesImageView.setImageResource(R.drawable.ic_error_orange_24dp);
-                            servicesTextView.setText("Missing");
-                        }
-                        if(user.getLanguages() != null) {
-                            languagesImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
-                            languagesTextView.setText("");
-                        } else {
-                            languagesImageView.setImageResource(R.drawable.ic_error_orange_24dp);
-                            languagesTextView.setText("Missing");
-                        }
                     } else {
                         Log.d(TAG, "Current data: null");
                     }
@@ -189,6 +175,63 @@ public class ProfileFragment extends MyFragment {
 
 
         return root;
+    }
+
+    private void updateGuideUI(int visibility) {
+        servicesLinearLayout.setVisibility(visibility);
+        languagesLinearLayout.setVisibility(visibility);
+        availableDatesLinearLayout.setVisibility(visibility);
+        aboutLinearLayout.setVisibility(visibility);
+        cityLinearLayout.setVisibility(visibility);
+    }
+
+    private boolean checkAndUpdate(User user){
+
+        if(user.getAvailableDates() != null){
+            availableDatesImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
+            availableDatesTextView.setText("");
+
+        } else {
+            availableDatesImageView.setImageResource(R.drawable.ic_error_orange_24dp);
+            availableDatesTextView.setText("Missing");
+        }
+        if(user.getCity() != null) {
+            cityImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
+            cityTextView.setText(user.getCity());
+        } else {
+            cityImageView.setImageResource(R.drawable.ic_error_orange_24dp);
+            cityTextView.setText("");
+        }
+        if(user.getServicesOffered() != null) {
+            servicesImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
+            servicesTextView.setText("");
+        } else {
+            servicesImageView.setImageResource(R.drawable.ic_error_orange_24dp);
+            servicesTextView.setText("Missing");
+        }
+        if(user.getLanguages() != null) {
+            languagesImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
+            languagesTextView.setText("");
+        } else {
+            languagesImageView.setImageResource(R.drawable.ic_error_orange_24dp);
+            languagesTextView.setText("Missing");
+        }
+        if(user.getQuote() != null && user.getAbout() != null
+                && !user.getQuote().equals("") && !user.getAbout().equals("")){
+
+            aboutImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
+            aboutTextView.setText("");
+        } else {
+            aboutImageView.setImageResource(R.drawable.ic_error_orange_24dp);
+            aboutTextView.setText("Missing");
+
+        }
+        return true;
+    }
+
+    private void aboutOnClick(View view) {
+        Intent intent = new Intent(getActivity().getApplicationContext(), AboutActivity.class);
+        startActivity(intent);
     }
 
     private void servicesOnClick(View view) {
@@ -204,9 +247,6 @@ public class ProfileFragment extends MyFragment {
     private void availableDatesOnClick(View view) {
         Intent intent = new Intent(root.getContext(), DatePickerActivity.class);
         startActivity(intent);
-    }
-
-    private void contactIdOnClick(View view) {
     }
 
     private void languagesOnClick(View view) {

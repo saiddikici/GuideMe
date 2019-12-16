@@ -1,6 +1,7 @@
 package com.selimkilicaslan.guideme.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.selimkilicaslan.guideme.R;
-import com.selimkilicaslan.guideme.classes.Guide;
+import com.selimkilicaslan.guideme.classes.User;
+import com.selimkilicaslan.guideme.ui.activities.GuideDetailsActivity;
 
 import java.util.ArrayList;
 
@@ -18,12 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class GuideSearchAdapter extends RecyclerView.Adapter<GuideSearchAdapter.MyViewHolder> {
 
-    ArrayList<Guide> guideArrayList;
+    ArrayList<User> guideArrayList;
     LayoutInflater inflater;
+    Context context;
 
-    public GuideSearchAdapter(Context context, ArrayList<Guide> guideArrayList) {
+    public GuideSearchAdapter(Context context, ArrayList<User> guideArrayList) {
         inflater = LayoutInflater.from(context);
         this.guideArrayList = guideArrayList;
+        this.context = context;
     }
 
 
@@ -31,12 +35,13 @@ public class GuideSearchAdapter extends RecyclerView.Adapter<GuideSearchAdapter.
     public GuideSearchAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.list_item_guides, parent, false);
         GuideSearchAdapter.MyViewHolder holder = new GuideSearchAdapter.MyViewHolder(view);
+        view.setOnClickListener(holder);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(GuideSearchAdapter.MyViewHolder holder, int position) {
-        Guide selectedGuide = guideArrayList.get(position);
+        User selectedGuide = guideArrayList.get(position);
         holder.setData(selectedGuide, position);
 
     }
@@ -63,11 +68,11 @@ public class GuideSearchAdapter extends RecyclerView.Adapter<GuideSearchAdapter.
 
         }
 
-        public void setData(Guide guide, int position) {
+        public void setData(User guide, int position) {
 
-            this.guideNameTextView.setText(guide.getName());
+            this.guideNameTextView.setText(guide.getUsername());
             this.guidePlaceTextView.setText(guide.getCity() + ", " + guide.getCountry());
-            this.guidePriceTextView.setText(guide.getPricePerHour() + "₺");
+            this.guidePriceTextView.setText(guide.getPricePerDay() + "₺");
             this.quoteTextView.setText(guide.getQuote());
             this.reviewCountTextView.setText(String.valueOf(guide.getReviewCount()));
             this.reviewRatingBar.setRating(guide.getRating());
@@ -80,8 +85,11 @@ public class GuideSearchAdapter extends RecyclerView.Adapter<GuideSearchAdapter.
 
         @Override
         public void onClick(View v) {
-
-
+            int position = getAdapterPosition();
+            String selectedGuideID = guideArrayList.get(position).getUserID();
+            Intent intent = new Intent(context, GuideDetailsActivity.class);
+            intent.putExtra("guideID", selectedGuideID);
+            context.startActivity(intent);
         }
     }
 }

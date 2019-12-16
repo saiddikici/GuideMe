@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.selimkilicaslan.guideme.R;
+import com.selimkilicaslan.guideme.classes.User;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.bumptech.glide.Glide;
 
@@ -15,8 +16,11 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
 
     private Context context;
 
-    public SliderAdapter(Context context) {
+    private User user;
+
+    public SliderAdapter(Context context, User user) {
         this.context = context;
+        this.user = user;
     }
 
     @Override
@@ -28,36 +32,30 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
 
-        switch (position) {
-            case 0:
-                viewHolder.sliderNameTextView.setText("Kübra");
-                viewHolder.sliderPlaceTextView.setText("İstanbul, Turkey");
-                Glide.with(viewHolder.itemView)
-                        .load("https://images.pexels.com/photos/218983/pexels-photo-218983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-            case 1:
-                Glide.with(viewHolder.itemView)
-                        .load("https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-            case 2:
-                Glide.with(viewHolder.itemView)
-                        .load("https://images.pexels.com/photos/929778/pexels-photo-929778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-            default:
-                Glide.with(viewHolder.itemView)
-                        .load("https://images.pexels.com/photos/218983/pexels-photo-218983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-
+        if(position == 0){
+            viewHolder.sliderNameTextView.setText(user.getUsername());
+            String place = user.getCity() + ", " + user.getCountry();
+            viewHolder.sliderPlaceTextView.setText(place);
+            String price = "₺" + user.getPricePerDay() + "/Day";
+            viewHolder.guidePriceTextView.setText(price);
+            viewHolder.guidePriceTextView.setVisibility(View.VISIBLE);
+            Glide.with(viewHolder.itemView)
+                    .load(user.getProfilePictureURL())
+                    .into(viewHolder.imageViewBackground);
+        } else {
+            Glide.with(viewHolder.itemView)
+                    .load(user.getPictureURLs().get(position - 1))
+                    .into(viewHolder.imageViewBackground);
         }
+
     }
 
     @Override
     public int getCount() {
-        return 4;
+        if(user.getPictureURLs() != null) {
+            return  user.getPictureURLs().size() + 1;
+        }
+        return 1;
     }
 
     public class SliderAdapterVH extends SliderViewAdapter.ViewHolder {
@@ -66,12 +64,14 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
         ImageView imageViewBackground;
         TextView sliderNameTextView;
         TextView sliderPlaceTextView;
+        TextView guidePriceTextView;
 
         public SliderAdapterVH(View itemView) {
             super(itemView);
             imageViewBackground = itemView.findViewById(R.id.sliderImageView);
             sliderNameTextView = itemView.findViewById(R.id.sliderNameTextView);
             sliderPlaceTextView = itemView.findViewById(R.id.sliderPlaceTextView);
+            guidePriceTextView = itemView.findViewById(R.id.guidePriceTextView);
             this.itemView = itemView;
         }
     }
