@@ -1,12 +1,16 @@
 package com.selimkilicaslan.guideme.adapters;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +30,14 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHolder> {
-    private ArrayList<Chat> chatArrayList;
+
+    final int RESULT_LOAD_IMAGE = 1;
+
+    private ArrayList<Bitmap> bitmapArrayList;
     private LayoutInflater inflater;
     private Context context;
     private String userID;
@@ -42,7 +50,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHold
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item_chat, parent, false);
+        View view = inflater.inflate(R.layout.list_item_photos, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         view.setOnClickListener(holder);
         return holder;
@@ -50,80 +58,62 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Chat selectedChat = chatArrayList.get(position);
-        holder.setData(selectedChat, position);
+        Bitmap selectedBitmap = bitmapArrayList.get(position);
+        holder.setData(selectedBitmap, position);
 
     }
 
     @Override
     public int getItemCount() {
-        return chatArrayList.size();
+        return bitmapArrayList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView cNameTextView, chatTextView;
-        de.hdodenhof.circleimageview.CircleImageView chatProfilePicture;
+        ImageView photoImageView;
+        de.hdodenhof.circleimageview.CircleImageView closeButton;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            cNameTextView = itemView.findViewById(R.id.cNameTextView);
-            chatTextView = itemView.findViewById(R.id.chatTextView);
-            chatProfilePicture = itemView.findViewById(R.id.chatProfilePicture);
+            photoImageView = itemView.findViewById(R.id.photoImageView);
+            closeButton = itemView.findViewById(R.id.closeButton);
 
         }
 
-        public void setData(final Chat chat, int position) {
-
-            DocumentReference reference;
-
-            if(userID.equals(chat.getFirstUser())) {
-                reference = chat.getSecondUserReference();
-            } else if(userID.equals(chat.getSecondUser())) {
-                reference = chat.getFirstUserReference();
+        public void setData(final Bitmap photo, final int position) {
+            if(position == 0) {
+                closeButton.setVisibility(View.GONE);
             } else {
-                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
-                return;
+                closeButton.setVisibility(View.VISIBLE);
             }
-
-            reference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            photoImageView.setImageBitmap(photo);
+            closeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful() && task.getResult() != null) {
-                        User user = task.getResult().toObject(User.class);
-                        if(user != null) {
-                            cNameTextView.setText(user.getUsername());
-                            chatTextView.setText(chat.getMessages().get(chat.getMessages().size() - 1).getMessageContent());
-                            Glide.with(context)
-                                    .asBitmap()
-                                    .load(user.getProfilePictureURL())
-                                    .into(new CustomTarget<Bitmap>() {
-                                        @Override
-                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                            chatProfilePicture.setImageBitmap(resource);
-                                        }
+                public void onClick(View view) {
+                    photoImageView.setImageBitmap(null);
+                    closeButton.setVisibility(View.GONE);
+                    bitmapArrayList.remove(position);
+                    notifyDataSetChanged();
+                }
+            });
+            photoImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                                        @Override
-                                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-                                        }
-                                    });
-                        }
-                    } else {
-                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(
+                                Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                        ((Activity) context).startActivityForResult(i, RESULT_LOAD_IMAGE);
                     }
                 }
             });
 
-            /*Glide.with(chatProfilePicture)
-                    .load(chat.getFirstUser().getProfilePictureURL())
-                    .into(chatProfilePicture);*/
-
-
-
-
         }
+
+
 
 
         @Override
@@ -131,9 +121,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHold
 
             int position = this.getAdapterPosition();
 
-            Intent intent = new Intent(context, ChatActivity.class);
-            intent.putExtra("chatID", chatArrayList.get(position).getChatID());
-            context.startActivity(intent);
+            //Intent intent = new Intent(context, ChatActivity.class);
+            //intent.putExtra("chatID", bitmapArrayList.get(position).getChatID());
+            //context.startActivity(intent);
 
         }
 
