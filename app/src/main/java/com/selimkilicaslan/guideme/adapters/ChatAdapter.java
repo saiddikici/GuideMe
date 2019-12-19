@@ -1,27 +1,44 @@
 package com.selimkilicaslan.guideme.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.Message;
+import com.selimkilicaslan.guideme.classes.User;
 
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
-    Chat chat;
-    LayoutInflater inflater;
 
-    public ChatAdapter(Context context, Chat chat) {
+    private Chat chat;
+    private LayoutInflater inflater;
+    private String userID;
+    private Bitmap senderImage;
+    private Bitmap receiverImage;
+
+    public ChatAdapter(final Context context, Chat chat, String userID, Bitmap senderImage, Bitmap receiverImage) {
         inflater = LayoutInflater.from(context);
         this.chat = chat;
+        this.userID = userID;
+        this.senderImage = senderImage;
+        this.receiverImage = receiverImage;
     }
 
 
@@ -63,16 +80,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         public void setData(Message message, int position) {
 
             this.chatContentTextView.setText(message.getMessageContent());
-            if (message.getSent()){
-                Glide.with(senderProfilePicture)
-                        .load(message.getUser().getProfilePictureURL())
-                        .into(senderProfilePicture);
+            if (message.getSender().equals(userID)){
+
+                senderProfilePicture.setImageBitmap(senderImage);
                 receiverProfilePicture.setVisibility(View.GONE);
             }
             else {
-                Glide.with(receiverProfilePicture)
-                        .load(message.getUser().getProfilePictureURL())
-                        .into(receiverProfilePicture);
+                receiverProfilePicture.setImageBitmap(receiverImage);
                 senderProfilePicture.setVisibility(View.GONE);
             }
 

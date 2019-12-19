@@ -46,7 +46,9 @@ public class SearchGuideFragment extends MyFragment {
 
         guides = new ArrayList<>();
 
-        mDatabase.collection("users").whereEqualTo("userType", UserType.GUIDE)
+        mDatabase.collection("users")
+                .whereEqualTo("userType", UserType.GUIDE)
+                .whereEqualTo("validGuide", true)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -64,45 +66,6 @@ public class SearchGuideFragment extends MyFragment {
                         }
                     }
                 });
-
-
-        /*User kubra = new User();
-        kubra.setUsername("Kübra");
-        kubra.setGender(Gender.FEMALE);
-        kubra.setCity("Istanbul");
-        kubra.setCountry("Turkey");
-        kubra.setQuote("This is an inspirational quote...");
-        kubra.setPricePerDay(1);
-        kubra.setReviewCount(1);
-        kubra.setRating(1);
-        kubra.setProfilePictureURL("https://img.freepik.com/free-photo/beautiful-girl-stands-near-walll-with-leaves_8353-5378.jpg?size=626&ext=jpg");
-        guides.add(kubra);
-
-        User enes = new User();
-        enes.setUsername("Selim Enes");
-        enes.setGender(Gender.MALE);
-        enes.setCity("Istanbul");
-        enes.setCountry("Turkey");
-        enes.setQuote("This is an inspirational quote...");
-        enes.setPricePerDay(22);
-        enes.setReviewCount(56);
-        enes.setRating(5);
-        enes.setProfilePictureURL("https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg");
-        guides.add(enes);
-
-        User said = new User();
-        said.setUsername("Said Dikici");
-        said.setGender(Gender.MALE);
-        said.setCity("Istanbul");
-        said.setCountry("Turkey");
-        said.setQuote("This is an inspirational quote...");
-        said.setPricePerDay(1);
-        said.setReviewCount(1);
-        said.setRating(1);
-        said.setProfilePictureURL("https://i.ibb.co/4j109Mv/taksim-dayi.png");
-        guides.add(said);
-
-         */
 
         guideSearchAdapter = new GuideSearchAdapter(root.getContext(), guides);
         guidesRecyclerView.setAdapter(guideSearchAdapter);

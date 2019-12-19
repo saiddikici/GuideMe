@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,9 @@ import com.selimkilicaslan.guideme.ui.activities.AboutActivity;
 import com.selimkilicaslan.guideme.ui.activities.DatePickerActivity;
 import com.selimkilicaslan.guideme.ui.activities.GeneralInfoActivity;
 import com.selimkilicaslan.guideme.ui.activities.LanguagesActivity;
+import com.selimkilicaslan.guideme.ui.activities.PlacesCoveredActivity;
 import com.selimkilicaslan.guideme.ui.activities.ServicesActivity;
+import com.selimkilicaslan.guideme.ui.dialogs.NumberPickerDialog;
 
 import java.io.IOException;
 import java.util.List;
@@ -54,6 +57,8 @@ public class ProfileFragment extends MyFragment {
     private LinearLayout servicesLinearLayout;
     private LinearLayout languagesLinearLayout;
     private LinearLayout aboutLinearLayout;
+    private LinearLayout priceLinearLayout;
+    private LinearLayout placesLinearLayout;
 
     private View root;
     private ImageView availableDatesImageView;
@@ -61,15 +66,21 @@ public class ProfileFragment extends MyFragment {
     private ImageView servicesImageView;
     private ImageView languagesImageView;
     private ImageView aboutImageView;
+    private ImageView priceImageView;
+    private ImageView placesImageView;
 
     private TextView cityTextView;
     private TextView availableDatesTextView;
     private TextView servicesTextView;
     private TextView languagesTextView;
     private TextView aboutTextView;
+    private TextView priceTextView;
+    private TextView placesTextView;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
+
+    private User user;
 
     @Nullable
     @Override
@@ -85,18 +96,24 @@ public class ProfileFragment extends MyFragment {
         servicesLinearLayout = root.findViewById(R.id.servicesLinearLayout);
         languagesLinearLayout = root.findViewById(R.id.languagesLinearLayout);
         aboutLinearLayout = root.findViewById(R.id.aboutLinearLayout);
+        priceLinearLayout = root.findViewById(R.id.priceLinearLayout);
+        placesLinearLayout = root.findViewById(R.id.placesLinearLayout);
 
         availableDatesImageView = root.findViewById(R.id.availableDatesImageView);
         cityImageView = root.findViewById(R.id.cityImageView);
         servicesImageView = root.findViewById(R.id.servicesImageView);
         languagesImageView = root.findViewById(R.id.languagesImageView);
         aboutImageView = root.findViewById(R.id.aboutImageView);
+        priceImageView = root.findViewById(R.id.priceImageView);
+        placesImageView = root.findViewById(R.id.placesImageView);
 
         availableDatesTextView = root.findViewById(R.id.availableDatesTextView);
         cityTextView = root.findViewById(R.id.cityTextView);
         servicesTextView = root.findViewById(R.id.servicesTextView);
         languagesTextView = root.findViewById(R.id.languagesTextView);
         aboutTextView = root.findViewById(R.id.aboutTextView);
+        priceTextView = root.findViewById(R.id.priceTextView);
+        placesTextView = root.findViewById(R.id.placesTextView);
 
         updateGuideUI(GONE);
 
@@ -142,6 +159,20 @@ public class ProfileFragment extends MyFragment {
             }
         });
 
+        priceLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                priceOnClick(view);
+            }
+        });
+
+        placesLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                placesOnClick(view);
+            }
+        });
+
         try {
             final DocumentReference userRef = mDatabase.collection("users").document(mUser.getUid());
             userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -155,10 +186,14 @@ public class ProfileFragment extends MyFragment {
 
                     if (snapshot != null && snapshot.exists()) {
                         Log.d(TAG, "Current data: " + snapshot.getData());
-                        User user = snapshot.toObject(User.class);
+                        user = snapshot.toObject(User.class);
                         if(user.getUserType() == UserType.GUIDE) {
                             updateGuideUI(VISIBLE);
-                            checkAndUpdate(user);
+                            boolean isValid = checkAndUpdate();
+                            if(user.isValidGuide() != isValid){
+                                user.setValidGuide(isValid);
+                                userRef.set(user);
+                            }
                         } else if (user.getUserType() == UserType.TOURIST) {
                             updateGuideUI(GONE);
                         }
@@ -185,7 +220,9 @@ public class ProfileFragment extends MyFragment {
         cityLinearLayout.setVisibility(visibility);
     }
 
-    private boolean checkAndUpdate(User user){
+    private boolean checkAndUpdate(){
+
+        boolean isValid = true;
 
         if(user.getAvailableDates() != null){
             availableDatesImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
@@ -194,6 +231,7 @@ public class ProfileFragment extends MyFragment {
         } else {
             availableDatesImageView.setImageResource(R.drawable.ic_error_orange_24dp);
             availableDatesTextView.setText("Missing");
+            isValid = false;
         }
         if(user.getCity() != null) {
             cityImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
@@ -201,6 +239,7 @@ public class ProfileFragment extends MyFragment {
         } else {
             cityImageView.setImageResource(R.drawable.ic_error_orange_24dp);
             cityTextView.setText("");
+            isValid = false;
         }
         if(user.getServicesOffered() != null) {
             servicesImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
@@ -208,6 +247,7 @@ public class ProfileFragment extends MyFragment {
         } else {
             servicesImageView.setImageResource(R.drawable.ic_error_orange_24dp);
             servicesTextView.setText("Missing");
+            isValid = false;
         }
         if(user.getLanguages() != null) {
             languagesImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
@@ -215,6 +255,24 @@ public class ProfileFragment extends MyFragment {
         } else {
             languagesImageView.setImageResource(R.drawable.ic_error_orange_24dp);
             languagesTextView.setText("Missing");
+            isValid = false;
+        }
+        if(user.getPricePerDay() != 0) {
+            priceImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
+            String priceText = "₺" + user.getPricePerDay() + "/Day";
+            priceTextView.setText(priceText);
+        } else {
+            priceImageView.setImageResource(R.drawable.ic_error_orange_24dp);
+            priceTextView.setText("₺0/Day");
+            isValid = false;
+        }
+        if(user.getPlacesCovered() != null) {
+            placesImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
+            placesTextView.setText("");
+        } else {
+            placesImageView.setImageResource(R.drawable.ic_error_orange_24dp);
+            placesTextView.setText("Missing");
+            isValid = false;
         }
         if(user.getQuote() != null && user.getAbout() != null
                 && !user.getQuote().equals("") && !user.getAbout().equals("")){
@@ -224,9 +282,27 @@ public class ProfileFragment extends MyFragment {
         } else {
             aboutImageView.setImageResource(R.drawable.ic_error_orange_24dp);
             aboutTextView.setText("Missing");
+            isValid = false;
 
         }
-        return true;
+        return isValid;
+    }
+
+    private void priceOnClick(View view) {
+        NumberPickerDialog npDialog = new NumberPickerDialog(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                int newValue = numberPicker.getValue();
+                DocumentReference userRef = mDatabase.collection("users").document(mUser.getUid());
+                userRef.update("pricePerDay", newValue);
+            }
+        }, user.getPricePerDay());
+        npDialog.show(getActivity().getSupportFragmentManager(), "Price Picker Dialog");
+    }
+
+    private void placesOnClick(View view) {
+        Intent intent = new Intent(getActivity().getApplicationContext(), PlacesCoveredActivity.class);
+        startActivity(intent);
     }
 
     private void aboutOnClick(View view) {

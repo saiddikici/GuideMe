@@ -1,9 +1,9 @@
 package com.selimkilicaslan.guideme.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,15 +28,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder> {
+public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHolder> {
     private ArrayList<Chat> chatArrayList;
     private LayoutInflater inflater;
     private Context context;
     private String userID;
 
-    public InboxAdapter(Context context, ArrayList<Chat> chatArrayList, String userID) {
+    public PhotosAdapter(Context context, String userID) {
         inflater = LayoutInflater.from(context);
-        this.chatArrayList = chatArrayList;
         this.context = context;
         this.userID = userID;
     }

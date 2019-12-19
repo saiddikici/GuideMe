@@ -1,26 +1,20 @@
 package com.selimkilicaslan.guideme.classes;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+
 import java.util.Date;
 
 public class Message {
     private String messageContent;
-    private User user;
-    private Date date;
-    private Boolean isSent;
+    private String sender;
+    private DocumentReference senderReference;
+    private Timestamp timestamp;
 
-    public Message(String messageContent, User user, Date date, Boolean isSent) {
+    public Message(String messageContent, String sender, Timestamp timestamp) {
         this.messageContent = messageContent;
-        this.user = user;
-        this.date = date;
-        this.isSent = isSent;
-    }
-
-    public Boolean getSent() {
-        return isSent;
-    }
-
-    public void setSent(Boolean sent) {
-        isSent = sent;
+        this.sender = sender;
+        this.timestamp = timestamp;
     }
 
     public String getMessageContent() {
@@ -30,23 +24,31 @@ public class Message {
     public Message() {
     }
 
+    public DocumentReference getSenderReference() {
+        return senderReference;
+    }
+
+    public void setSenderReference(DocumentReference senderReference) {
+        this.senderReference = senderReference;
+    }
+
     public void setMessageContent(String messageContent) {
         this.messageContent = messageContent;
     }
 
-    public User getUser() {
-        return user;
+    public String getSender() {
+        return sender;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
-    public Date getTime() {
-        return date;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setTime(Date date) {
-        this.date = date;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 }

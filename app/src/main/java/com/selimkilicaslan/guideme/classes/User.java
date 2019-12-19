@@ -1,5 +1,6 @@
 package com.selimkilicaslan.guideme.classes;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.selimkilicaslan.guideme.types.Gender;
 import com.selimkilicaslan.guideme.types.UserType;
 
@@ -17,15 +18,18 @@ public class User {
     private String country;
     private String quote;
     private String about;
+    private String placesCovered;
     private UserType userType;
     private Gender gender;
     private List<Date> availableDates;
+    private List<DocumentReference> conversationIDs;
     private int reviewCount;
     private int pricePerDay;
     private float rating;
     private ArrayList<ServiceOffered> servicesOffered;
     private ArrayList<LanguageOffered> languages;
     private ArrayList<String> pictureURLs;
+    private boolean validGuide;
 
     public User() {
     }
@@ -47,6 +51,30 @@ public class User {
         this.profilePictureURL = profilePictureURL;
         this.userType = userType;
         this.gender = gender;
+    }
+
+    public String getPlacesCovered() {
+        return placesCovered;
+    }
+
+    public void setPlacesCovered(String placesCovered) {
+        this.placesCovered = placesCovered;
+    }
+
+    public boolean isValidGuide() {
+        return validGuide;
+    }
+
+    public void setValidGuide(boolean validGuide) {
+        this.validGuide = validGuide;
+    }
+
+    public List<DocumentReference> getConversationIDs() {
+        return conversationIDs;
+    }
+
+    public void setConversationIDs(List<DocumentReference> conversationIDs) {
+        this.conversationIDs = conversationIDs;
     }
 
     public ArrayList<String> getPictureURLs() {

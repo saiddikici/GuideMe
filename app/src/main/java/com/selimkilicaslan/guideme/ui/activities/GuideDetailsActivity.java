@@ -1,18 +1,27 @@
 package com.selimkilicaslan.guideme.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.adapters.SliderAdapter;
+import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.LanguageOffered;
+import com.selimkilicaslan.guideme.classes.Message;
 import com.selimkilicaslan.guideme.classes.MyAppCompatActivity;
 import com.selimkilicaslan.guideme.classes.ServiceOffered;
 import com.selimkilicaslan.guideme.classes.User;
 import com.smarteist.autoimageslider.SliderView;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class GuideDetailsActivity extends MyAppCompatActivity {
 
@@ -23,6 +32,7 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
     private TextView aboutTextView;
     private TextView languageTextView;
     private TextView servicesTextView;
+    private TextView placesTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +46,7 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
         aboutTextView = findViewById(R.id.aboutTextView);
         languageTextView = findViewById(R.id.languageTextView);
         servicesTextView = findViewById(R.id.servicesTextView);
+        placesTextView = findViewById(R.id.placesTextView);
 
         DocumentReference reference = mDatabase.collection("users").document(guideID);
         reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -60,9 +71,30 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
                 }
                 if(services.equals("")) services = "No extra services";
                 servicesTextView.setText(services);
+
+                placesTextView.setText(guide.getPlacesCovered());
             }
         });
 
+
+    }
+
+    public void onContactButtonClick(View view) {
+
+        String chatID = UUID.randomUUID().toString();
+        DocumentReference firstRef = mDatabase.collection("users").document(mUser.getUid());
+        DocumentReference secondRef = mDatabase.collection("users").document(guideID);
+        Chat newChat = new Chat(mUser.getUid(), guideID, chatID, firstRef, secondRef, new ArrayList<Message>());
+
+        DocumentReference chatRef = mDatabase.collection("conversations").document(chatID);
+        chatRef.set(newChat);
+
+        firstRef.update("conversationIDs", FieldValue.arrayUnion(chatRef));
+        secondRef.update("conversationIDs", FieldValue.arrayUnion(chatRef));
+
+        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        intent.putExtra("chatID", chatID);
+        startActivity(intent);
 
     }
 }
