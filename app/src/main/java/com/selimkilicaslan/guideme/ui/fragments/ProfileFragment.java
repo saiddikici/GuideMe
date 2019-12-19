@@ -32,6 +32,7 @@ import com.selimkilicaslan.guideme.ui.activities.AboutActivity;
 import com.selimkilicaslan.guideme.ui.activities.DatePickerActivity;
 import com.selimkilicaslan.guideme.ui.activities.GeneralInfoActivity;
 import com.selimkilicaslan.guideme.ui.activities.LanguagesActivity;
+import com.selimkilicaslan.guideme.ui.activities.PhotosActivity;
 import com.selimkilicaslan.guideme.ui.activities.PlacesCoveredActivity;
 import com.selimkilicaslan.guideme.ui.activities.ServicesActivity;
 import com.selimkilicaslan.guideme.ui.dialogs.NumberPickerDialog;
@@ -59,6 +60,7 @@ public class ProfileFragment extends MyFragment {
     private LinearLayout aboutLinearLayout;
     private LinearLayout priceLinearLayout;
     private LinearLayout placesLinearLayout;
+    private LinearLayout photosLinearLayout;
 
     private View root;
     private ImageView availableDatesImageView;
@@ -98,6 +100,7 @@ public class ProfileFragment extends MyFragment {
         aboutLinearLayout = root.findViewById(R.id.aboutLinearLayout);
         priceLinearLayout = root.findViewById(R.id.priceLinearLayout);
         placesLinearLayout = root.findViewById(R.id.placesLinearLayout);
+        photosLinearLayout = root.findViewById(R.id.photosLinearLayout);
 
         availableDatesImageView = root.findViewById(R.id.availableDatesImageView);
         cityImageView = root.findViewById(R.id.cityImageView);
@@ -173,6 +176,13 @@ public class ProfileFragment extends MyFragment {
             }
         });
 
+        photosLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                photosOnClick(view);
+            }
+        });
+
         try {
             final DocumentReference userRef = mDatabase.collection("users").document(mUser.getUid());
             userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -207,9 +217,12 @@ public class ProfileFragment extends MyFragment {
             ex.printStackTrace();
         }
 
-
-
         return root;
+    }
+
+    private void photosOnClick(View view) {
+        Intent intent = new Intent(getActivity().getApplicationContext(), PhotosActivity.class);
+        startActivity(intent);
     }
 
     private void updateGuideUI(int visibility) {
