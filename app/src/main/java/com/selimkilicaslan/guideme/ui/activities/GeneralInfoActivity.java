@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,24 +21,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.classes.ImageHandler;
 import com.selimkilicaslan.guideme.classes.MyAppCompatActivity;
 import com.selimkilicaslan.guideme.classes.User;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import io.opencensus.tags.Tag;
 
@@ -53,11 +61,15 @@ public class GeneralInfoActivity extends MyAppCompatActivity {
     EditText confirmNewPasswordEditText;
     Button saveProfileChangesButton;
 
+    boolean isChanged;
+    boolean isPictureChanged = false;
+
     String filePath;
 
     User user;
 
     UserProfileChangeRequest profileUpdates;
+    DocumentReference docRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,74 +86,156 @@ public class GeneralInfoActivity extends MyAppCompatActivity {
         confirmNewPasswordEditText = findViewById(R.id.confirmNewPasswordEditText);
         saveProfileChangesButton = findViewById(R.id.saveProfileChangesButton);
 
+        saveProfileChangesButton.setClickable(false);
 
-        DocumentReference docRef = mDatabase.collection("users").document(mUser.getUid());
+
+        docRef = mDatabase.collection("users").document(mUser.getUid());
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 user = documentSnapshot.toObject(User.class);
 
-                /*nameEditText.setText(user.getUsername());
-                emailTextView.setText(user.getEmail());
-                phoneEditText.setText(user.getPhoneNumber());*/
+                Glide.with(generalInfoProfileImageView)
+                        .load(mUser.getPhotoUrl())
+                        .into(generalInfoProfileImageView);
+                nameEditText.setText(mUser.getDisplayName());
+                emailTextView.setText(mUser.getEmail());
+                phoneEditText.setText(user.getPhoneNumber());
+                saveProfileChangesButton.setClickable(true);
             }
         });
-
-        Glide.with(generalInfoProfileImageView)
-                .load(mUser.getPhotoUrl())
-                .into(generalInfoProfileImageView);
-        nameEditText.setText(mUser.getDisplayName());
-        emailTextView.setText(mUser.getEmail());
-        phoneEditText.setText(mUser.getPhoneNumber());
     }
 
-    //TODO şifreleri kontrol et
-    //TODO email güncellemeyi şeyet
     //TODO Profil resmi güncellemeyi kontrol et
     public void saveButtonOnClick(View view) {
-        profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(nameEditText.getText().toString())
-                .build();
-        mUser.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Log.d("GuideMe", "User Profile Updated");
-                            Toast.makeText(GeneralInfoActivity.this, "User Profile Updated", Toast.LENGTH_SHORT).show();
+        isChanged = false;
+        if(!user.getUsername().equals(nameEditText.getText().toString())){
+            isChanged = true;
+            profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(nameEditText.getText().toString())
+                    .build();
+            mUser.updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Log.d("GuideMe", "User Profile Updated");
+                                Toast.makeText(GeneralInfoActivity.this, "Name is Updated", Toast.LENGTH_SHORT).show();
+                                docRef.update("username", nameEditText.getText().toString());
+                                Toast.makeText(GeneralInfoActivity.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Log.d("GuideMe", "Error");
+                                Toast.makeText(GeneralInfoActivity.this, "Error, name is not updated", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else {
-                            Log.d("GuideMe", "Error");
-                            Toast.makeText(GeneralInfoActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-        AuthCredential credential = EmailAuthProvider.getCredential(emailTextView.getText().toString(), currentPasswordEditText.getText().toString());
-        mUser.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            mUser.updatePassword(newPasswordEditText.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Log.d("GuideMe", "Password Updated");
-                                        Toast.makeText(GeneralInfoActivity.this, "Password Updated", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else {
-                                        Log.d("GuideMe", "Error");
-                                        Toast.makeText(GeneralInfoActivity.this, "Error, password not updated.", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                        } else {
-                            Log.d("GuideMe", "Auth failed");
-                            Toast.makeText(GeneralInfoActivity.this, "Auth failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                    });
+        }
 
+        if(currentPasswordEditText.getText() != null && !currentPasswordEditText.getText().toString().equals("")
+            && newPasswordEditText.getText().toString().equals(confirmNewPasswordEditText.getText().toString())) {
+            isChanged = true;
+            AuthCredential credential = EmailAuthProvider.getCredential(emailTextView.getText().toString(), currentPasswordEditText.getText().toString());
+            mUser.reauthenticate(credential)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                mUser.updatePassword(newPasswordEditText.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Log.d("GuideMe", "Password Updated");
+                                            Toast.makeText(GeneralInfoActivity.this, "Password Updated", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(GeneralInfoActivity.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else {
+                                            Log.d("GuideMe", "Error");
+                                            Toast.makeText(GeneralInfoActivity.this, "Error, password not updated.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            } else {
+                                Log.d("GuideMe", "Wrong password!");
+                                Toast.makeText(GeneralInfoActivity.this, "Wrong password, password not updated", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+        else if (currentPasswordEditText.getText() == null || currentPasswordEditText.getText().toString().equals("")){
+        }
+        else {
+            Toast.makeText(GeneralInfoActivity.this, "Wrong credentials, password not updated", Toast.LENGTH_SHORT).show();
+        }
+
+        if (!user.getPhoneNumber().equals(phoneEditText.getText().toString())){
+            isChanged = true;
+            docRef.update("phoneNumber", phoneEditText.getText().toString());
+            Toast.makeText(GeneralInfoActivity.this, "Phone Number Updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GeneralInfoActivity.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+        }
+
+
+        if(isPictureChanged){
+            isChanged = true;
+            StorageReference storageRef = mStorage.getReference();
+            StorageReference imagesRef = storageRef.child("images");
+            StorageReference userImagesRef = imagesRef.child(mUser.getUid());
+            String imageUUID = UUID.randomUUID().toString();
+            String imageName = imageUUID + ".jpg";
+            final StorageReference newImageRef = userImagesRef.child(imageName);
+
+            Bitmap bitmap = ((BitmapDrawable) generalInfoProfileImageView.getDrawable()).getBitmap();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            UploadTask uploadTask = newImageRef.putBytes(data);
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    return newImageRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        docRef.update("profilePictureURL", downloadUri.toString());
+                        profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setPhotoUri(downloadUri)
+                                .build();
+                        mUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(GeneralInfoActivity.this, "Profile picture changed", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(GeneralInfoActivity.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    Toast.makeText(GeneralInfoActivity.this, "Cannot update picture", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Cannot update picture", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+        if (!isChanged){
+            Toast.makeText(GeneralInfoActivity.this, "No changes", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(GeneralInfoActivity.this, "Updating...", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        finish();
     }
 
     public void profileImageOnClick(View view) {
@@ -194,6 +288,7 @@ public class GeneralInfoActivity extends MyAppCompatActivity {
             try {
                 bitmap = ImageHandler.handleSamplingAndRotationBitmap(getApplicationContext(), Uri.fromFile(new File(picturePath)));
                 filePath = picturePath.substring(picturePath.lastIndexOf("/") + 1);
+                isPictureChanged = true;
             } catch (IOException e) {
                 bitmap = null;
                 e.printStackTrace();
