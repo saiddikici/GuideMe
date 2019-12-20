@@ -231,6 +231,9 @@ public class ProfileFragment extends MyFragment {
         availableDatesLinearLayout.setVisibility(visibility);
         aboutLinearLayout.setVisibility(visibility);
         cityLinearLayout.setVisibility(visibility);
+        placesLinearLayout.setVisibility(visibility);
+        aboutLinearLayout.setVisibility(visibility);
+        priceLinearLayout.setVisibility(visibility);
     }
 
     private boolean checkAndUpdate(){

@@ -4,22 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <EditText
-        android:id="@+id/searchEditText"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/edittext_background"
-        android:ems="10"
-        android:hint="Type a city"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/searchTextView"
-        app:layout_constraintHorizontal_bias="0.627"
-        app:layout_constraintStart_toStartOf="@+id/searchTextView"
-        app:layout_constraintTop_toBottomOf="@+id/searchTextView"
-        app:layout_constraintVertical_bias="0.0" />
-
     <TextView
         android:id="@+id/searchTextView"
         android:layout_width="wrap_content"
@@ -34,6 +18,48 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <LinearLayout
+        android:id="@+id/searchLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/searchTextView"
+        app:layout_constraintHorizontal_bias="0.627"
+        app:layout_constraintStart_toStartOf="@+id/searchTextView"
+        app:layout_constraintTop_toBottomOf="@+id/searchTextView"
+        app:layout_constraintVertical_bias="0.0">
+
+        <EditText
+            android:id="@+id/cityEditText"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:background="@drawable/edittext_background"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="Type a city"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/dateEditText"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:background="@drawable/edittext_background"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Date"
+            android:inputType="none" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/searchButton"
         style="@android:style/Widget.Holo.Button.Toggle"
@@ -44,9 +70,9 @@
         android:textColorLink="#70FFFFFF"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/searchEditText"
-        app:layout_constraintStart_toStartOf="@+id/searchEditText"
-        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
+        app:layout_constraintEnd_toEndOf="@+id/searchLinearLayout"
+        app:layout_constraintStart_toStartOf="@+id/searchLinearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/searchLinearLayout"
         app:layout_constraintVertical_bias="0.0" />
 
 

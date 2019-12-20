@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.adapters.SliderAdapter;
 import com.selimkilicaslan.guideme.classes.Chat;
@@ -22,6 +26,8 @@ import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
+import androidx.annotation.NonNull;
 
 public class GuideDetailsActivity extends MyAppCompatActivity {
 
@@ -81,20 +87,61 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
 
     public void onContactButtonClick(View view) {
 
-        String chatID = UUID.randomUUID().toString();
-        DocumentReference firstRef = mDatabase.collection("users").document(mUser.getUid());
-        DocumentReference secondRef = mDatabase.collection("users").document(guideID);
-        Chat newChat = new Chat(mUser.getUid(), guideID, chatID, firstRef, secondRef, new ArrayList<Message>());
+        mDatabase.collection("conversations")
+                .whereEqualTo("firstUser", mUser.getUid())
+                .whereEqualTo("secondUser", guideID)
+                .limit(1)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful() && task.getResult() != null && task.getResult().size() > 0){
+                            for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                Chat chat = documentSnapshot.toObject(Chat.class);
+                                String chatID = chat.getChatID();
+                                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                                intent.putExtra("chatID", chatID);
+                                startActivity(intent);
+                            }
+                        } else {
+                            mDatabase.collection("conversations")
+                                    .whereEqualTo("firstUser", guideID)
+                                    .whereEqualTo("secondUser", mUser.getUid())
+                                    .limit(1)
+                                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful() && task.getResult() != null && task.getResult().size() > 0){
+                                        for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                            Chat chat = documentSnapshot.toObject(Chat.class);
+                                            String chatID = chat.getChatID();
+                                            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                                            intent.putExtra("chatID", chatID);
+                                            startActivity(intent);
+                                        }
+                                    } else {
 
-        DocumentReference chatRef = mDatabase.collection("conversations").document(chatID);
-        chatRef.set(newChat);
+                                        String chatID = UUID.randomUUID().toString();
+                                        DocumentReference firstRef = mDatabase.collection("users").document(mUser.getUid());
+                                        DocumentReference secondRef = mDatabase.collection("users").document(guideID);
+                                        Chat newChat = new Chat(mUser.getUid(), guideID, chatID, firstRef, secondRef, new ArrayList<Message>());
 
-        firstRef.update("conversationIDs", FieldValue.arrayUnion(chatRef));
-        secondRef.update("conversationIDs", FieldValue.arrayUnion(chatRef));
+                                        DocumentReference chatRef = mDatabase.collection("conversations").document(chatID);
+                                        chatRef.set(newChat);
 
-        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-        intent.putExtra("chatID", chatID);
-        startActivity(intent);
+                                        firstRef.update("conversationIDs", FieldValue.arrayUnion(chatRef));
+                                        secondRef.update("conversationIDs", FieldValue.arrayUnion(chatRef));
+
+                                        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                                        intent.putExtra("chatID", chatID);
+                                        startActivity(intent);
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+
 
     }
 }
