@@ -106,10 +106,9 @@ public class GeneralInfoActivity extends MyAppCompatActivity {
         });
     }
 
-    //TODO Profil resmi güncellemeyi kontrol et
     public void saveButtonOnClick(View view) {
         isChanged = false;
-        if(!user.getUsername().equals(nameEditText.getText().toString())){
+        if(!user.getUsername().equals(nameEditText.getText().toString()) && !nameEditText.getText().toString().equals("")){
             isChanged = true;
             profileUpdates = new UserProfileChangeRequest.Builder()
                     .setDisplayName(nameEditText.getText().toString())
@@ -168,7 +167,7 @@ public class GeneralInfoActivity extends MyAppCompatActivity {
             Toast.makeText(GeneralInfoActivity.this, "Wrong credentials, password not updated", Toast.LENGTH_SHORT).show();
         }
 
-        if (!user.getPhoneNumber().equals(phoneEditText.getText().toString())){
+        if (!user.getPhoneNumber().equals(phoneEditText.getText().toString()) && !phoneEditText.getText().toString().equals("")){
             isChanged = true;
             docRef.update("phoneNumber", phoneEditText.getText().toString());
             Toast.makeText(GeneralInfoActivity.this, "Phone Number Updated", Toast.LENGTH_SHORT).show();
