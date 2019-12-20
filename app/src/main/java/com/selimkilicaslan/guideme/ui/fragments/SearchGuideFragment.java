@@ -131,8 +131,6 @@ public class SearchGuideFragment extends MyFragment {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        //Calendar temp = Calendar.getInstance();
-                        //temp.set(year, month, dayOfMonth, 0, 0, 0);
                         month++;
                         String dateText = dayOfMonth + "/" + month + "/" + year;
                         try {
