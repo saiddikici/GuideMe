@@ -84,91 +84,107 @@ public class RegisterActivity extends MyAppCompatActivity {
 
     public void registerButtonOnClick(View view) {
 
-        final String name, email, password, phone;
-        final UserType userType;
-        final Gender gender;
-        name = nameEditText.getText().toString();
-        email = emailEditText.getText().toString();
-        password = passwordEditText.getText().toString();
-        phone = phoneEditText.getText().toString();
-        if (genderSpinner.getSelectedItemPosition() == 0)
-            gender = Gender.MALE;
-        else gender = Gender.FEMALE;
+        registerButton.setClickable(false);
 
-        if (radioGroup.getCheckedRadioButtonId() == touristRadioButton.getId()) userType = UserType.TOURIST;
-        else userType = UserType.GUIDE;
+        if (!nameEditText.getText().toString().equals("") &&
+            !emailEditText.getText().toString().equals("") &&
+            !phoneEditText.getText().toString().equals("")){
 
-        newUser = new User();
-        newUser.setEmail(email);
-        newUser.setGender(gender);
-        newUser.setPhoneNumber(phone);
-        newUser.setUsername(name);
-        newUser.setUserType(userType);
+            final String name, email, password, phone;
+            final UserType userType;
+            final Gender gender;
+            name = nameEditText.getText().toString();
+            email = emailEditText.getText().toString();
+            password = passwordEditText.getText().toString();
+            phone = phoneEditText.getText().toString();
+            if (genderSpinner.getSelectedItemPosition() == 0)
+                gender = Gender.MALE;
+            else gender = Gender.FEMALE;
 
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            final FirebaseUser user = mAuth.getCurrentUser();
+            if (radioGroup.getCheckedRadioButtonId() == touristRadioButton.getId()) userType = UserType.TOURIST;
+            else userType = UserType.GUIDE;
 
-                            StorageReference storageRef = mStorage.getReference();
-                            StorageReference imagesRef = storageRef.child("images");
-                            StorageReference userImagesRef = imagesRef.child(user.getUid());
-                            newUser.setUserID(user.getUid());
-                            String imageUUID = UUID.randomUUID().toString();
-                            String imageName = imageUUID + ".jpg";
-                            final StorageReference newImageRef = userImagesRef.child(imageName);
+            newUser = new User();
+            newUser.setEmail(email);
+            newUser.setGender(gender);
+            newUser.setPhoneNumber(phone);
+            newUser.setUsername(name);
+            newUser.setUserType(userType);
 
-                            Bitmap bitmap = ((BitmapDrawable) profileImageView.getDrawable()).getBitmap();
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                            byte[] data = baos.toByteArray();
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
 
-                            UploadTask uploadTask = newImageRef.putBytes(data);
-                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                                @Override
-                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                    if (!task.isSuccessful()) {
-                                        throw task.getException();
+                                final FirebaseUser user = mAuth.getCurrentUser();
+
+                                StorageReference storageRef = mStorage.getReference();
+                                StorageReference imagesRef = storageRef.child("images");
+                                StorageReference userImagesRef = imagesRef.child(user.getUid());
+                                newUser.setUserID(user.getUid());
+
+                                addUserToDatabase();
+
+                                String imageUUID = UUID.randomUUID().toString();
+                                String imageName = imageUUID + ".jpg";
+                                final StorageReference newImageRef = userImagesRef.child(imageName);
+
+                                Bitmap bitmap = ((BitmapDrawable) profileImageView.getDrawable()).getBitmap();
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                byte[] data = baos.toByteArray();
+
+                                UploadTask uploadTask = newImageRef.putBytes(data);
+                                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                    @Override
+                                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                        if (!task.isSuccessful()) {
+                                            throw task.getException();
+                                        }
+                                        return newImageRef.getDownloadUrl();
                                     }
-                                    return newImageRef.getDownloadUrl();
-                                }
-                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        Uri downloadUri = task.getResult();
-                                        newUser.setProfilePictureURL(downloadUri.toString());
-                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                                .setDisplayName(name)
-                                                .setPhotoUri(downloadUri)
-                                                .build();
-                                        user.updateProfile(profileUpdates)
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Toast.makeText(getApplicationContext(), "User successfully created!", Toast.LENGTH_SHORT).show();
-                                                            addUserToDatabase();
-                                                            finish();
+                                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        if (task.isSuccessful()) {
+                                            Uri downloadUri = task.getResult();
+                                            newUser.setProfilePictureURL(downloadUri.toString());
+                                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                    .setDisplayName(name)
+                                                    .setPhotoUri(downloadUri)
+                                                    .build();
+                                            user.updateProfile(profileUpdates)
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Toast.makeText(getApplicationContext(), "User successfully created!", Toast.LENGTH_SHORT).show();
+                                                                finish();
+                                                            }
                                                         }
-                                                    }
-                                                });
+                                                    });
 
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), "Cannot create user!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Error! Cannot upload photo", Toast.LENGTH_SHORT).show();
 
+                                        }
                                     }
-                                }
-                            });
+                                });
 
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "Cannot create user!",
-                                    Toast.LENGTH_SHORT).show();
+                            } else {
+                                registerButton.setClickable(true);
+                                Toast.makeText(RegisterActivity.this, "Cannot create user!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Please fill all of the fields!", Toast.LENGTH_SHORT).show();
+            registerButton.setClickable(true);
+        }
 
     }
 
@@ -179,7 +195,7 @@ public class RegisterActivity extends MyAppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Creating user...", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

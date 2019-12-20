@@ -146,16 +146,20 @@ public class ChatActivity extends MyAppCompatActivity {
     }
 
     public void sendMessageButtonOnClick(View view){
-        String content = messageInputEditText.getText().toString();
-        Message message = new Message(content, mUser.getUid(), Timestamp.now());
-        DocumentReference senderRef = mDatabase.collection("users").document(mUser.getUid());
-        message.setSenderReference(senderRef);
-        DocumentReference reference = mDatabase.collection("conversations").document(chatID);
-        reference.update("messages", FieldValue.arrayUnion(message));
-        //messages.add(message);
-        //messages.add(message2);
-        //chat.setMessages(messages);
-        //chatAdapter.notifyDataSetChanged();
-        //messageInputEditText.setText("");
+        if (!messageInputEditText.getText().toString().equals("")){
+            String content = messageInputEditText.getText().toString();
+            Message message = new Message(content, mUser.getUid(), Timestamp.now());
+            DocumentReference senderRef = mDatabase.collection("users").document(mUser.getUid());
+            message.setSenderReference(senderRef);
+            DocumentReference reference = mDatabase.collection("conversations").document(chatID);
+            reference.update("messages", FieldValue.arrayUnion(message));
+            messageInputEditText.setText("");
+            //messages.add(message);
+            //messages.add(message2);
+            //chat.setMessages(messages);
+            //chatAdapter.notifyDataSetChanged();
+            //messageInputEditText.setText("");
+        }
+
     }
 }
