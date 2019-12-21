@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/navigation_matches"
         android:name="com.selimkilicaslan.guideme.ui.fragments.MatchesFragment"
-        android:label="fragment_matches"
+        android:label="Match List"
         tools:layout="@layout/fragment_matches" />
 
 </navigation>
