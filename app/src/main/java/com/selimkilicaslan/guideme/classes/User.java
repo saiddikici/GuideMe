@@ -25,6 +25,7 @@ public class User {
     private List<Date> availableDates;
     private List<Date> plannedDates;
     private List<DocumentReference> conversationIDs;
+    private List<DocumentReference> matchReferences;
     private int reviewCount;
     private int pricePerDay;
     private float rating;
@@ -45,14 +46,20 @@ public class User {
         this.gender = gender;
     }
 
-    public User(String userID, String username, String email, String phoneNumber, String profilePictureURL, UserType userType, Gender gender) {
-        this.userID = userID;
-        this.username = username;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.profilePictureURL = profilePictureURL;
-        this.userType = userType;
-        this.gender = gender;
+    public List<Date> getPlannedDates() {
+        return plannedDates;
+    }
+
+    public void setPlannedDates(List<Date> plannedDates) {
+        this.plannedDates = plannedDates;
+    }
+
+    public List<DocumentReference> getMatchReferences() {
+        return matchReferences;
+    }
+
+    public void setMatchReferences(List<DocumentReference> matchReferences) {
+        this.matchReferences = matchReferences;
     }
 
     public String getToken() {

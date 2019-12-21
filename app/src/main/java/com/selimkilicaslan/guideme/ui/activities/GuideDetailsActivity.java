@@ -26,12 +26,14 @@ import com.selimkilicaslan.guideme.classes.Message;
 import com.selimkilicaslan.guideme.classes.MyAppCompatActivity;
 import com.selimkilicaslan.guideme.classes.ServiceOffered;
 import com.selimkilicaslan.guideme.classes.User;
+import com.selimkilicaslan.guideme.types.MatchStatus;
 import com.smarteist.autoimageslider.SliderView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import androidx.annotation.NonNull;
@@ -169,7 +171,7 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
             return;
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(GuideDetailsActivity.this);
         builder.setTitle("Guide reservation");
         builder.setMessage(String.format("Do you want to make a reservation for ₺%d on %s", guide.getPricePerDay(), selectedDate));
         builder.setNegativeButton("No", null);
@@ -185,19 +187,61 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
     private void makeReservation() {
 
         String matchID = UUID.randomUUID().toString();
-        DocumentReference guideRef = mDatabase.collection("users").document(guideID);
-        DocumentReference touristRef = mDatabase.collection("users").document(mUser.getUid());
+        final DocumentReference guideRef = mDatabase.collection("users").document(guideID);
+        final DocumentReference touristRef = mDatabase.collection("users").document(mUser.getUid());
         Match newMatch = new Match();
         newMatch.setMatchID(matchID);
         newMatch.setGuide(guideID);
         newMatch.setGuideReference(guideRef);
-        newMatch.setGuide(mUser.getUid());
-        newMatch.setGuideReference(touristRef);
+        newMatch.setTourist(mUser.getUid());
+        newMatch.setTouristReference(touristRef);
         newMatch.setPrice(guide.getPricePerDay());
         newMatch.setDate(date);
-        DocumentReference matchRef = mDatabase.collection("matches").document(matchID);
+        newMatch.setStatus(MatchStatus.PLANNED);
+        final DocumentReference matchRef = mDatabase.collection("matches").document(matchID);
         matchRef.set(newMatch);
-        guideRef.update("plannedDates", FieldValue.arrayUnion(date));
+        guideRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                guide = documentSnapshot.toObject(User.class);
+                if (guide != null) {
+                    List<DocumentReference> docRefs = new ArrayList<>();
+                    if(guide.getMatchReferences() != null) {
+                        docRefs.addAll(guide.getMatchReferences());
+                    }
+                    docRefs.add(matchRef);
+                    List<Date> dates = new ArrayList<>();
+                    if(guide.getPlannedDates() != null){
+                        dates.addAll(guide.getPlannedDates());
+                    }
+                    dates.add(date);
+                    guide.setMatchReferences(docRefs);
+                    guide.setPlannedDates(dates);
+                    guideRef.set(guide);
+                }
+            }
+        });
+        touristRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                if (user != null) {
+                    List<DocumentReference> docRefs = new ArrayList<>();
+                    if(user.getMatchReferences() != null) {
+                        docRefs.addAll(user.getMatchReferences());
+                    }
+                    docRefs.add(matchRef);
+                    List<Date> dates = new ArrayList<>();
+                    if(user.getPlannedDates() != null) {
+                        dates.addAll(user.getPlannedDates());
+                    }
+                    dates.add(date);
+                    user.setMatchReferences(docRefs);
+                    user.setPlannedDates(dates);
+                    touristRef.set(user);
+                }
+            }
+        });
         Toast.makeText(getApplicationContext(), "Reservation completed", Toast.LENGTH_SHORT).show();
     }
 }
