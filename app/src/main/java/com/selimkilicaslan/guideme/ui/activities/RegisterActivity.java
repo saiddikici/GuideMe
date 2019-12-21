@@ -82,8 +82,7 @@ public class RegisterActivity extends MyAppCompatActivity {
 
     }
 
-    //TODO profile picture url oluşmamasını kontrol et
-    //TODO otentikeyşından dönen hataları sınıflandır
+
     public void registerButtonOnClick(View view) {
 
         registerButton.setClickable(false);
@@ -126,8 +125,6 @@ public class RegisterActivity extends MyAppCompatActivity {
                                 StorageReference userImagesRef = imagesRef.child(user.getUid());
                                 newUser.setUserID(user.getUid());
 
-                                addUserToDatabase();
-
                                 String imageUUID = UUID.randomUUID().toString();
                                 String imageName = imageUUID + ".jpg";
                                 final StorageReference newImageRef = userImagesRef.child(imageName);
@@ -161,6 +158,7 @@ public class RegisterActivity extends MyAppCompatActivity {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if (task.isSuccessful()) {
+                                                                addUserToDatabase();
                                                                 Toast.makeText(getApplicationContext(), "User successfully created!", Toast.LENGTH_SHORT).show();
                                                                 finish();
                                                             }
@@ -197,7 +195,7 @@ public class RegisterActivity extends MyAppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "Creating user...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Redirecting...", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
