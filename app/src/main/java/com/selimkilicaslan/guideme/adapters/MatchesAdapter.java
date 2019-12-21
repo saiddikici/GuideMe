@@ -1,7 +1,6 @@
 package com.selimkilicaslan.guideme.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.R.drawable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,20 +18,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.selimkilicaslan.guideme.R;
-import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.Match;
 import com.selimkilicaslan.guideme.classes.User;
 import com.selimkilicaslan.guideme.types.MatchStatus;
-import com.selimkilicaslan.guideme.ui.activities.ChatActivity;
 
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 
 public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MyViewHolder> {
     private ArrayList<Match> matchArrayList;
@@ -104,21 +98,20 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MyViewHo
                     if(task.isSuccessful() && task.getResult() != null) {
                         User user = task.getResult().toObject(User.class);
                         if(user != null) {
-                            //cNameTextView.setText(user.getUsername());
-                            //chatTextView.setText(chat.getMessages().get(chat.getMessages().size() - 1).getMessageContent());
                             if (match.getStatus().equals(MatchStatus.PLANNED)){
                                 mNameTextView.setText("Matched - " + user.getUsername());
                                 statusImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
                                 arrowImageView.setImageResource(R.drawable.ic_chevron_right_gray_24dp);
-                                seeDetailsTextView.setText("See details");
+                                seeDetailsTextView.setText("Status: ");
                             }
                             else if(match.getStatus().equals(MatchStatus.WAITING)){
                                 mNameTextView.setText(user.getUsername() + " sent you a request");
                                 statusImageView.setImageResource(R.drawable.ic_info_yellow_24dp);
                                 arrowImageView.setImageResource(R.drawable.ic_chevron_right_gray_24dp);
-                                seeDetailsTextView.setText("See details");
+                                seeDetailsTextView.setText("Status: ");
                             }
-                            dateTextView.setText(match.getDate().toString());
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                            dateTextView.setText(formatter.format(match.getDate()));
                             Glide.with(context)
                                     .asBitmap()
                                     .load(user.getProfilePictureURL())

@@ -35,43 +35,48 @@ public class LoginActivity extends MyAppCompatActivity {
     }
 
     public void loginButtonOnClick(View view) {
-        String email, password;
+        if(!emailEditText.getText().toString().equals("") && !passwordEditText.getText().toString().equals("")){
+            String email, password;
 
-        email = emailEditText.getText().toString();
-        password = passwordEditText.getText().toString();
+            email = emailEditText.getText().toString();
+            password = passwordEditText.getText().toString();
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseInstanceId.getInstance().getInstanceId()
-                                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                            if (!task.isSuccessful()) {
-                                                return;
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseInstanceId.getInstance().getInstanceId()
+                                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    return;
+                                                }
+                                                String token = task.getResult().getToken();
+                                                mUser = mAuth.getCurrentUser();
+                                                DocumentReference ref = mDatabase.collection("users").document(mUser.getUid());
+                                                ref.update("token", token);
+                                                Log.d("FIREBASETOKEN", token);
+
                                             }
-                                            String token = task.getResult().getToken();
-                                            mUser = mAuth.getCurrentUser();
-                                            DocumentReference ref = mDatabase.collection("users").document(mUser.getUid());
-                                            ref.update("token", token);
-                                            Log.d("FIREBASETOKEN", token);
-
-                                        }
-                                    });
+                                        });
 
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             finish();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            }
 
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
+                    });
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Email or password cannot be empty!", Toast.LENGTH_SHORT).show();
+        }
 
-                    }
-                });
 
     }
 }

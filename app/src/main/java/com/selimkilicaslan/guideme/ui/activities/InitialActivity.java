@@ -30,7 +30,6 @@ public class InitialActivity extends MyAppCompatActivity {
 
     }
 
-    //TODO login patlaması kontrol et
     public void loginButtonOnClick(View view) {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
