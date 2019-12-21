@@ -20,9 +20,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.Match;
@@ -67,9 +70,9 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MyViewHo
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView mNameTextView, dateTextView;
+        TextView mNameTextView, dateTextView, seeDetailsTextView;
         de.hdodenhof.circleimageview.CircleImageView matchProfilePicture;
-        ImageView statusImageView;
+        ImageView statusImageView, arrowImageView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -78,6 +81,8 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MyViewHo
             dateTextView = itemView.findViewById(R.id.dateTextView);
             matchProfilePicture = itemView.findViewById(R.id.matchProfilePicture);
             statusImageView = itemView.findViewById(R.id.statusImageView);
+            seeDetailsTextView = itemView.findViewById(R.id.seeDetailsTextView);
+            arrowImageView = itemView.findViewById(R.id.arrowImageView);
 
         }
 
@@ -93,7 +98,6 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MyViewHo
                 Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             reference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -104,10 +108,15 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MyViewHo
                             //chatTextView.setText(chat.getMessages().get(chat.getMessages().size() - 1).getMessageContent());
                             if (match.getStatus().equals(MatchStatus.PLANNED)){
                                 mNameTextView.setText("Matched - " + user.getUsername());
+                                statusImageView.setImageResource(R.drawable.ic_check_circle_green_24dp);
+                                arrowImageView.setImageResource(R.drawable.ic_chevron_right_gray_24dp);
+                                seeDetailsTextView.setText("See details");
                             }
                             else if(match.getStatus().equals(MatchStatus.WAITING)){
                                 mNameTextView.setText(user.getUsername() + " sent you a request");
-                                statusImageView.setImageResource(R.drawable.ic_error_orange_24dp);
+                                statusImageView.setImageResource(R.drawable.ic_info_yellow_24dp);
+                                arrowImageView.setImageResource(R.drawable.ic_chevron_right_gray_24dp);
+                                seeDetailsTextView.setText("See details");
                             }
                             dateTextView.setText(match.getDate().toString());
                             Glide.with(context)

@@ -34,7 +34,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"
-                android:text="Tourist account sent you a request"
                 android:textColor="@color/colorBlack"
                 android:textStyle="bold" />
 
@@ -47,7 +46,6 @@
                     android:id="@+id/seeDetailsTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="See details"
                     android:textColor="@color/colorBlack" />
 
                 <ImageView
@@ -55,8 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="19dp"
                     android:layout_weight="1"
-                    android:paddingLeft="70dp"
-                    app:srcCompat="@drawable/ic_check_circle_green_24dp" />
+                    android:paddingLeft="70dp" />
             </LinearLayout>
 
 
@@ -64,20 +61,18 @@
                 android:id="@+id/dateTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:text="Date" />
+                android:paddingTop="8dp" />
 
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView8"
+            android:id="@+id/arrowImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:paddingLeft="20dp"
-            android:paddingTop="15dp"
-            app:srcCompat="@drawable/ic_chevron_right_gray_24dp" />
+            android:paddingTop="15dp" />
 
     </LinearLayout>
     <View

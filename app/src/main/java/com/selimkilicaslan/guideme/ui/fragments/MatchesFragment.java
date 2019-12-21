@@ -51,12 +51,12 @@ public class MatchesFragment extends MyFragment {
                 User user = documentSnapshot.toObject(User.class);
                 if(user != null && user.getMatchReferences() != null) {
                     for(DocumentReference matchID : user.getMatchReferences()){
-                        matchID.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        matchID.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                                 Match match = documentSnapshot.toObject(Match.class);
                                 if (match != null && match.getDate() != null && match.getGuideReference() != null &&
-                                    match.getTouristReference() != null && match.getStatus() != null &&
+                                        match.getTouristReference() != null && match.getStatus() != null &&
                                         !(match.getStatus().equals(MatchStatus.CANCELED) || match.getStatus().equals(MatchStatus.DONE))) {
                                     matches.add(match);
                                     matchesAdapter.notifyDataSetChanged();
