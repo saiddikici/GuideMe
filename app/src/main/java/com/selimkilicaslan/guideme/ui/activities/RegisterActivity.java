@@ -82,6 +82,8 @@ public class RegisterActivity extends MyAppCompatActivity {
 
     }
 
+    //TODO profile picture url oluşmamasını kontrol et
+    //TODO otentikeyşından dönen hataları sınıflandır
     public void registerButtonOnClick(View view) {
 
         registerButton.setClickable(false);

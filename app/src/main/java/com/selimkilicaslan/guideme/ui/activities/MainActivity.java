@@ -60,7 +60,7 @@ public class MainActivity extends MyAppCompatActivity {
 
                     } else {
                         appBarConfiguration = new AppBarConfiguration.Builder(
-                                R.id.navigation_guide_home, R.id.navigation_inbox, R.id.navigation_profile)
+                                R.id.navigation_guide_home, R.id.navigation_matches, R.id.navigation_inbox, R.id.navigation_profile)
                                 .build();
                         navView.inflateMenu(R.menu.menu_bottom_nav_guide);
                         navController.setGraph(R.navigation.mobile_navigation_guide);

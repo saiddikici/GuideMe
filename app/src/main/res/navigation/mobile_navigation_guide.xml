@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/navigation_guide_home">
+    app:startDestination="@id/navigation_matches">
 
     <fragment
         android:id="@+id/navigation_inbox"
@@ -21,5 +21,10 @@
         android:name="com.selimkilicaslan.guideme.ui.fragments.GuideHomeFragment"
         android:label="GuideMe"
         tools:layout="@layout/fragment_guide_home" />
+    <fragment
+        android:id="@+id/navigation_matches"
+        android:name="com.selimkilicaslan.guideme.ui.fragments.MatchesFragment"
+        android:label="fragment_matches"
+        tools:layout="@layout/fragment_matches" />
 
 </navigation>

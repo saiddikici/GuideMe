@@ -9,6 +9,11 @@
         android:title="GuideMe" />
 
     <item
+        android:id="@+id/navigation_upcoming"
+        android:icon="@drawable/ic_schedule_white_24dp"
+        android:title="Upcoming Reservations" />
+
+    <item
         android:id="@+id/navigation_inbox"
         android:icon="@drawable/ic_chat_black_24dp"
         android:title="Inbox" />
