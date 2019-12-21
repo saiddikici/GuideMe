@@ -84,9 +84,15 @@ public class MainActivity extends MyAppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.actionLogout){
-            mAuth.signOut();
-            Toast.makeText(getApplicationContext(), "Logged out", Toast.LENGTH_SHORT).show();
-            finish();
+            DocumentReference ref = mDatabase.collection("users").document(mUser.getUid());
+            ref.update("token", "").addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    mAuth.signOut();
+                    Toast.makeText(getApplicationContext(), "Logged out", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
         }
 
         return true;
