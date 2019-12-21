@@ -47,7 +47,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MyViewHo
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item_chat, parent, false);
+        View view = inflater.inflate(R.layout.list_item_match, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         view.setOnClickListener(holder);
         return holder;
@@ -85,7 +85,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MyViewHo
 
             DocumentReference reference;
 
-            if(userID.equals(match.getGuideReference())) {
+            if(userID.equals(match.getGuide())) {
                 reference = match.getTouristReference();
             } else if(userID.equals(match.getTouristReference())) {
                 reference = match.getGuideReference();
@@ -107,7 +107,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MyViewHo
                             }
                             else if(match.getStatus().equals(MatchStatus.WAITING)){
                                 mNameTextView.setText(user.getUsername() + " sent you a request");
-                                matchProfilePicture.setImageResource(R.drawable.ic_error_orange_24dp);
+                                statusImageView.setImageResource(R.drawable.ic_error_orange_24dp);
                             }
                             dateTextView.setText(match.getDate().toString());
                             Glide.with(context)

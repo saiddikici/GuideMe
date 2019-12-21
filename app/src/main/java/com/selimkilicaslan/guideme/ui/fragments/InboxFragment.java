@@ -66,15 +66,6 @@ public class InboxFragment extends MyFragment {
         });
 
 
-        //ArrayList<Message> messages = new ArrayList<>();
-        //User user = new User("ali","ali@ali","554", "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg", UserType.GUIDE, Gender.MALE);
-        //User user1 = new User("ali","ali@ali","554", "https://pbs.twimg.com/media/EISSCGLXYAATGvM.jpg", UserType.GUIDE, Gender.MALE);
-        //Date date = new Date();
-        //Message message = new Message("Tahsim", user, date, true);
-        //messages.add(message);
-        //chats.add(new Chat(user, messages));
-        //chats.add(new Chat(user1, messages));
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(root.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         chatRecyclerView.setLayoutManager(linearLayoutManager);

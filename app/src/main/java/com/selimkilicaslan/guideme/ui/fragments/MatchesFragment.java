@@ -51,14 +51,13 @@ public class MatchesFragment extends MyFragment {
                 User user = documentSnapshot.toObject(User.class);
                 if(user != null && user.getMatchReferences() != null) {
                     for(DocumentReference matchID : user.getMatchReferences()){
-                        //DocumentReference conversationRef = mDatabase.collection("conversations").document(conversationID.getId());
                         matchID.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 Match match = documentSnapshot.toObject(Match.class);
                                 if (match != null && match.getDate() != null && match.getGuideReference() != null &&
                                     match.getTouristReference() != null && match.getStatus() != null &&
-                                        (match.getStatus().equals(MatchStatus.CANCELED) || match.getStatus().equals(MatchStatus.DONE))) {
+                                        !(match.getStatus().equals(MatchStatus.CANCELED) || match.getStatus().equals(MatchStatus.DONE))) {
                                     matches.add(match);
                                     matchesAdapter.notifyDataSetChanged();
                                 }
@@ -69,15 +68,6 @@ public class MatchesFragment extends MyFragment {
             }
         });
 
-
-        //ArrayList<Message> messages = new ArrayList<>();
-        //User user = new User("ali","ali@ali","554", "https://pbs.twimg.com/profile_images/586131436392046592/YdkXfQah_400x400.jpg", UserType.GUIDE, Gender.MALE);
-        //User user1 = new User("ali","ali@ali","554", "https://pbs.twimg.com/media/EISSCGLXYAATGvM.jpg", UserType.GUIDE, Gender.MALE);
-        //Date date = new Date();
-        //Message message = new Message("Tahsim", user, date, true);
-        //messages.add(message);
-        //chats.add(new Chat(user, messages));
-        //chats.add(new Chat(user1, messages));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(root.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
