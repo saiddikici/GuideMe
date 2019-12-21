@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "783964099613-kjhc20dml4pa2epig5pmnglmqhgo1nhq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.selimkilicaslan.guideme",
+            "certificate_hash": "f3676fc2f118113af5d88a058f6dc0908481cac9"
+          }
+        },
+        {
           "client_id": "783964099613-4hp65dpq6p379bakhrquqcc0a2eor9ab.apps.googleusercontent.com",
           "client_type": 3
         }

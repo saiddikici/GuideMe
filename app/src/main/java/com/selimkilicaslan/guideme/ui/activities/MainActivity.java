@@ -1,37 +1,76 @@
 package com.selimkilicaslan.guideme.ui.activities;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.classes.MyAppCompatActivity;
+import com.selimkilicaslan.guideme.classes.User;
+import com.selimkilicaslan.guideme.types.UserType;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends MyAppCompatActivity {
 
     BottomNavigationView navView;
+    NavHostFragment nav_host_fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Log.d("TOKEN", FirebaseInstanceId.getInstance().getToken());
+        final ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
+                "Loading. Please wait...", true);
         navView = findViewById(R.id.nav_view);
+
+        final AppCompatActivity appCompatActivity = this;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_search, R.id.navigation_inbox, R.id.navigation_profile)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+        DocumentReference reference = mDatabase.collection("users").document(mUser.getUid());
+        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                AppBarConfiguration appBarConfiguration;
+                User user = documentSnapshot.toObject(User.class);
+                NavController navController = Navigation.findNavController(appCompatActivity, R.id.nav_host_fragment);
+                if(user != null){
+                    if(user.getUserType() == UserType.TOURIST){
+                        appBarConfiguration = new AppBarConfiguration.Builder(
+                                R.id.navigation_search, R.id.navigation_inbox, R.id.navigation_profile)
+                                .build();
+                        navView.inflateMenu(R.menu.menu_bottom_nav_tourist);
+                        navController.setGraph(R.navigation.mobile_navigation_tourist);
+
+
+                    } else {
+                        appBarConfiguration = new AppBarConfiguration.Builder(
+                                R.id.navigation_guide_home, R.id.navigation_inbox, R.id.navigation_profile)
+                                .build();
+                        navView.inflateMenu(R.menu.menu_bottom_nav_guide);
+                        navController.setGraph(R.navigation.mobile_navigation_guide);
+                    }
+                    NavigationUI.setupActionBarWithNavController(appCompatActivity, navController, appBarConfiguration);
+                    NavigationUI.setupWithNavController(navView, navController);
+                    dialog.dismiss();
+                }
+            }
+        });
 
     }
 
@@ -55,7 +94,7 @@ public class MainActivity extends MyAppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(navView.getSelectedItemId() == R.id.navigation_search) {
+        if(navView.getSelectedItemId() == R.id.navigation_search || navView.getSelectedItemId() == R.id.navigation_guide_home) {
 
         } else {
             super.onBackPressed();

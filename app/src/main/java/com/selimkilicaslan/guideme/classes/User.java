@@ -19,6 +19,7 @@ public class User {
     private String quote;
     private String about;
     private String placesCovered;
+    private String token;
     private UserType userType;
     private Gender gender;
     private List<Date> availableDates;
@@ -51,6 +52,14 @@ public class User {
         this.profilePictureURL = profilePictureURL;
         this.userType = userType;
         this.gender = gender;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getPlacesCovered() {

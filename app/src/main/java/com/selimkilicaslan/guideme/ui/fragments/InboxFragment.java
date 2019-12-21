@@ -1,6 +1,8 @@
 package com.selimkilicaslan.guideme.ui.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.MyFragment;
 import com.selimkilicaslan.guideme.classes.User;
 import com.selimkilicaslan.guideme.adapters.InboxAdapter;
+import com.selimkilicaslan.guideme.ui.activities.MainActivity;
 
 import java.util.ArrayList;
 
@@ -45,10 +48,9 @@ public class InboxFragment extends MyFragment {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 chats.clear();
-                User user = documentSnapshot.toObject(User.class);
+                final User user = documentSnapshot.toObject(User.class);
                 if(user != null && user.getConversationIDs() != null) {
                     for(DocumentReference conversationID : user.getConversationIDs()){
-                        //DocumentReference conversationRef = mDatabase.collection("conversations").document(conversationID.getId());
                         conversationID.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {

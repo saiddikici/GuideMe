@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <item
+        android:id="@+id/navigation_guide_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="GuideMe" />
+
+    <item
+        android:id="@+id/navigation_inbox"
+        android:icon="@drawable/ic_chat_black_24dp"
+        android:title="Inbox" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_profile_black_24dp"
+        android:title="Profile" />
+
+</menu>
