@@ -10,12 +10,12 @@ import com.selimkilicaslan.guideme.classes.MyFragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 public class GuideHomeFragment extends MyFragment {
 
-    View upcomingView;
+    private View upcomingView;
 
     @Nullable
     @Override
@@ -35,15 +35,10 @@ public class GuideHomeFragment extends MyFragment {
     }
 
     private void onUpcomingViewClick(View v) {
-        Fragment newFragment = new MatchesFragment();
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack if needed
-        transaction.replace(R.id.nav_host_fragment, newFragment);
-        transaction.addToBackStack(null);
-
-// Commit the transaction
-        transaction.commit();
+        NavDirections action =
+                GuideHomeFragmentDirections
+                        .actionNavigationGuideHomeToNavigationMatches();
+        Navigation.findNavController(v).navigate(action);
     }
 }

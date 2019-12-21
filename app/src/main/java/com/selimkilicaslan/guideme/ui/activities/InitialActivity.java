@@ -16,7 +16,9 @@ public class InitialActivity extends MyAppCompatActivity {
         if(mUser != null){
 
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            finish();
         }
         setContentView(R.layout.activity_initial);
 
