@@ -44,6 +44,8 @@ public class SearchGuideFragment extends MyFragment {
     private Date selectedDate;
     private Button searchButton;
 
+    public static String dateText;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -132,7 +134,7 @@ public class SearchGuideFragment extends MyFragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month++;
-                        String dateText = dayOfMonth + "/" + month + "/" + year;
+                        dateText = dayOfMonth + "/" + month + "/" + year;
                         try {
                             selectedDate = new SimpleDateFormat("dd/MM/yyyy").parse(dateText);
                             dateEditText.setText(dateText);

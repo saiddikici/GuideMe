@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.selimkilicaslan.guideme.ui.fragments.SearchGuideFragment.dateText;
+
 public class GuideSearchAdapter extends RecyclerView.Adapter<GuideSearchAdapter.MyViewHolder> {
 
     ArrayList<User> guideArrayList;
@@ -89,6 +91,7 @@ public class GuideSearchAdapter extends RecyclerView.Adapter<GuideSearchAdapter.
             String selectedGuideID = guideArrayList.get(position).getUserID();
             Intent intent = new Intent(context, GuideDetailsActivity.class);
             intent.putExtra("guideID", selectedGuideID);
+            intent.putExtra("selectedDate", dateText);
             context.startActivity(intent);
         }
     }

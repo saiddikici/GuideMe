@@ -133,13 +133,6 @@ public class ChatActivity extends MyAppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         chatRecyclerView.setLayoutManager(linearLayoutManager);
@@ -154,11 +147,6 @@ public class ChatActivity extends MyAppCompatActivity {
             DocumentReference reference = mDatabase.collection("conversations").document(chatID);
             reference.update("messages", FieldValue.arrayUnion(message));
             messageInputEditText.setText("");
-            //messages.add(message);
-            //messages.add(message2);
-            //chat.setMessages(messages);
-            //chatAdapter.notifyDataSetChanged();
-            //messageInputEditText.setText("");
         }
 
     }

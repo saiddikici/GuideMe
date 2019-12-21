@@ -14,7 +14,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.google.firebase.storage.FirebaseStorage;
 import com.selimkilicaslan.guideme.R;
 
 import java.util.Map;

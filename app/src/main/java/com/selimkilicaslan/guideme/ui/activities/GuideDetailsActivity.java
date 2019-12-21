@@ -1,14 +1,17 @@
 package com.selimkilicaslan.guideme.ui.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -18,16 +21,21 @@ import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.adapters.SliderAdapter;
 import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.LanguageOffered;
+import com.selimkilicaslan.guideme.classes.Match;
 import com.selimkilicaslan.guideme.classes.Message;
 import com.selimkilicaslan.guideme.classes.MyAppCompatActivity;
 import com.selimkilicaslan.guideme.classes.ServiceOffered;
 import com.selimkilicaslan.guideme.classes.User;
 import com.smarteist.autoimageslider.SliderView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 public class GuideDetailsActivity extends MyAppCompatActivity {
 
@@ -40,6 +48,9 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
     private TextView servicesTextView;
     private TextView placesTextView;
 
+    private String selectedDate;
+    private Date date;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +58,9 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
 
         guideID = getIntent().getStringExtra("guideID");
         if (guideID == null || guideID.equals("")) finish();
+
+        selectedDate = getIntent().getStringExtra("selectedDate");
+        if (selectedDate == null || selectedDate.equals("")) finish();
 
         quoteTextView = findViewById(R.id.quoteTextView);
         aboutTextView = findViewById(R.id.aboutTextView);
@@ -143,5 +157,47 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
                 });
 
 
+    }
+
+    public void onMatchButtonClick(View view) {
+
+        try {
+            date = new SimpleDateFormat("dd/MM/yyyy").parse(selectedDate);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Date format error", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setTitle("Guide reservation");
+        builder.setMessage(String.format("Do you want to make a reservation for ₺%d on %s", guide.getPricePerDay(), selectedDate));
+        builder.setNegativeButton("No", null);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                makeReservation();
+            }
+        });
+        builder.show();
+    }
+
+    private void makeReservation() {
+
+        String matchID = UUID.randomUUID().toString();
+        DocumentReference guideRef = mDatabase.collection("users").document(guideID);
+        DocumentReference touristRef = mDatabase.collection("users").document(mUser.getUid());
+        Match newMatch = new Match();
+        newMatch.setMatchID(matchID);
+        newMatch.setGuide(guideID);
+        newMatch.setGuideReference(guideRef);
+        newMatch.setGuide(mUser.getUid());
+        newMatch.setGuideReference(touristRef);
+        newMatch.setPrice(guide.getPricePerDay());
+        newMatch.setDate(date);
+        DocumentReference matchRef = mDatabase.collection("matches").document(matchID);
+        matchRef.set(newMatch);
+        guideRef.update("plannedDates", FieldValue.arrayUnion(date));
+        Toast.makeText(getApplicationContext(), "Reservation completed", Toast.LENGTH_SHORT).show();
     }
 }

@@ -17,7 +17,6 @@ import com.selimkilicaslan.guideme.classes.Chat;
 import com.selimkilicaslan.guideme.classes.MyFragment;
 import com.selimkilicaslan.guideme.classes.User;
 import com.selimkilicaslan.guideme.adapters.InboxAdapter;
-import com.selimkilicaslan.guideme.ui.activities.MainActivity;
 
 import java.util.ArrayList;
 

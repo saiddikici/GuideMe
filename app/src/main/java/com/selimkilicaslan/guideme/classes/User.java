@@ -23,6 +23,7 @@ public class User {
     private UserType userType;
     private Gender gender;
     private List<Date> availableDates;
+    private List<Date> plannedDates;
     private List<DocumentReference> conversationIDs;
     private int reviewCount;
     private int pricePerDay;
