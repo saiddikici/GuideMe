@@ -23,6 +23,7 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".ui.activities.WalletActivity"></activity>
         <activity android:name=".ui.activities.PhotosActivity" />
         <activity android:name=".ui.activities.PlacesCoveredActivity" />
         <activity
