@@ -20,6 +20,8 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.functions.HttpsCallableResult;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.adapters.SliderAdapter;
 import com.selimkilicaslan.guideme.classes.Chat;
@@ -107,63 +109,78 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
     }
 
     public void onContactButtonClick(View view) {
+        /*startConversations().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(!task.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "Can't create conversation right now", Toast.LENGTH_SHORT).show();
+                } else {
+                    String chatID = task.getResult();
+                    Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                    intent.putExtra("chatID", chatID);
+                    startActivity(intent);
+                }
 
+            }
+        }); */
+        startConversation();
+    }
+
+    private void startConversation(){
         mDatabase.collection("conversations")
                 .whereEqualTo("firstUser", mUser.getUid())
                 .whereEqualTo("secondUser", guideID)
                 .limit(1)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful() && task.getResult() != null && task.getResult().size() > 0){
-                            for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                                Chat chat = documentSnapshot.toObject(Chat.class);
-                                String chatID = chat.getChatID();
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful() && task.getResult() != null && task.getResult().size() > 0){
+                    for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                        Chat chat = documentSnapshot.toObject(Chat.class);
+                        String chatID = chat.getChatID();
+                        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                        intent.putExtra("chatID", chatID);
+                        startActivity(intent);
+                    }
+                } else {
+                    mDatabase.collection("conversations")
+                            .whereEqualTo("firstUser", guideID)
+                            .whereEqualTo("secondUser", mUser.getUid())
+                            .limit(1)
+                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful() && task.getResult() != null && task.getResult().size() > 0){
+                                for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                    Chat chat = documentSnapshot.toObject(Chat.class);
+                                    String chatID = chat.getChatID();
+                                    Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                                    intent.putExtra("chatID", chatID);
+                                    startActivity(intent);
+                                }
+                            } else {
+
+                                String chatID = UUID.randomUUID().toString();
+                                DocumentReference firstRef = mDatabase.collection("users").document(mUser.getUid());
+                                DocumentReference secondRef = mDatabase.collection("users").document(guideID);
+                                Chat newChat = new Chat(mUser.getUid(), guideID, chatID, firstRef, secondRef, new ArrayList<Message>());
+
+                                DocumentReference chatRef = mDatabase.collection("conversations").document(chatID);
+                                chatRef.set(newChat);
+
+                                firstRef.update("conversationIDs", FieldValue.arrayUnion(chatRef));
+                                secondRef.update("conversationIDs", FieldValue.arrayUnion(chatRef));
+
                                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                                 intent.putExtra("chatID", chatID);
                                 startActivity(intent);
+
                             }
-                        } else {
-                            mDatabase.collection("conversations")
-                                    .whereEqualTo("firstUser", guideID)
-                                    .whereEqualTo("secondUser", mUser.getUid())
-                                    .limit(1)
-                                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if(task.isSuccessful() && task.getResult() != null && task.getResult().size() > 0){
-                                        for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                                            Chat chat = documentSnapshot.toObject(Chat.class);
-                                            String chatID = chat.getChatID();
-                                            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                                            intent.putExtra("chatID", chatID);
-                                            startActivity(intent);
-                                        }
-                                    } else {
-
-                                        String chatID = UUID.randomUUID().toString();
-                                        DocumentReference firstRef = mDatabase.collection("users").document(mUser.getUid());
-                                        DocumentReference secondRef = mDatabase.collection("users").document(guideID);
-                                        Chat newChat = new Chat(mUser.getUid(), guideID, chatID, firstRef, secondRef, new ArrayList<Message>());
-
-                                        DocumentReference chatRef = mDatabase.collection("conversations").document(chatID);
-                                        chatRef.set(newChat);
-
-                                        firstRef.update("conversationIDs", FieldValue.arrayUnion(chatRef));
-                                        secondRef.update("conversationIDs", FieldValue.arrayUnion(chatRef));
-
-                                        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                                        intent.putExtra("chatID", chatID);
-                                        startActivity(intent);
-
-                                    }
-                                }
-                            });
                         }
-                    }
-                });
-
-
+                    });
+                }
+            }
+        });
     }
 
     public void onMatchButtonClick(View view) {
@@ -252,15 +269,12 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
     }
     private Task<String> startConversations() {
         // Create the arguments to the callable function.
-        String matchID = UUID.randomUUID().toString();
-        final DocumentReference matchRef = mDatabase.collection("matches").document(matchID);
         Map<String, Object> data = new HashMap<>();
-        data.put("firstUser", mUser.getUid());
-        data.put("secondUser", guideID);
-        data.put("messages", FieldValue.arrayUnion(matchRef));
+        data.put("uid", mUser.getUid());
+        data.put("seconduid", guideID);
 
         return mFunctions
-                .getHttpsCallable("addMessage")
+                .getHttpsCallable("startConversation")
                 .call(data)
                 .continueWith(new Continuation<HttpsCallableResult, String>() {
                     @Override

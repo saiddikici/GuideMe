@@ -39,8 +39,8 @@ public class ChatActivity extends MyAppCompatActivity {
 
     Chat chat = new Chat();
     ArrayList<Message> messages;
-    User user;
-    User user2;
+    User sender;
+    User receiver;
 
     ChatAdapter chatAdapter;
 
@@ -82,7 +82,7 @@ public class ChatActivity extends MyAppCompatActivity {
                 senderRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        User sender = documentSnapshot.toObject(User.class);
+                        sender = documentSnapshot.toObject(User.class);
                         Glide.with(getApplicationContext())
                                 .asBitmap()
                                 .load(sender.getProfilePictureURL())
@@ -93,7 +93,7 @@ public class ChatActivity extends MyAppCompatActivity {
                                         receiverRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                             @Override
                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                User receiver = documentSnapshot.toObject(User.class);
+                                                receiver = documentSnapshot.toObject(User.class);
                                                 Glide.with(getApplicationContext())
                                                         .asBitmap()
                                                         .load(receiver.getProfilePictureURL())
@@ -140,6 +140,7 @@ public class ChatActivity extends MyAppCompatActivity {
 
     public void sendMessageButtonOnClick(View view){
         if (!messageInputEditText.getText().toString().equals("")){
+
             String content = messageInputEditText.getText().toString();
             Message message = new Message(content, mUser.getUid(), Timestamp.now());
             DocumentReference senderRef = mDatabase.collection("users").document(mUser.getUid());
@@ -147,6 +148,7 @@ public class ChatActivity extends MyAppCompatActivity {
             DocumentReference reference = mDatabase.collection("conversations").document(chatID);
             reference.update("messages", FieldValue.arrayUnion(message));
             messageInputEditText.setText("");
+
         }
 
     }
