@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.storage.FirebaseStorage;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ public class MyFragment extends Fragment {
     public FirebaseStorage mStorage;
     public FirebaseUser mUser;
     public FirebaseFirestore mDatabase;
+    public FirebaseFunctions mFunctions;
 
     @Nullable
     @Override
@@ -29,6 +31,7 @@ public class MyFragment extends Fragment {
         mStorage = FirebaseStorage.getInstance();
         mUser = mAuth.getCurrentUser();
         mDatabase = FirebaseFirestore.getInstance();
+        mFunctions = FirebaseFunctions.getInstance();
         return null;
     }
 }

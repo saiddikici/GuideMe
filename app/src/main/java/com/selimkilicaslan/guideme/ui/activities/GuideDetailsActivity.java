@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -17,6 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.selimkilicaslan.guideme.R;
 import com.selimkilicaslan.guideme.adapters.SliderAdapter;
 import com.selimkilicaslan.guideme.classes.Chat;
@@ -33,7 +36,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import androidx.annotation.NonNull;
@@ -179,6 +184,7 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 makeReservation();
+
             }
         });
         builder.show();
@@ -243,5 +249,28 @@ public class GuideDetailsActivity extends MyAppCompatActivity {
             }
         });
         Toast.makeText(getApplicationContext(), "Reservation completed", Toast.LENGTH_SHORT).show();
+    }
+    private Task<String> startConversations() {
+        // Create the arguments to the callable function.
+        String matchID = UUID.randomUUID().toString();
+        final DocumentReference matchRef = mDatabase.collection("matches").document(matchID);
+        Map<String, Object> data = new HashMap<>();
+        data.put("firstUser", mUser.getUid());
+        data.put("secondUser", guideID);
+        data.put("messages", FieldValue.arrayUnion(matchRef));
+
+        return mFunctions
+                .getHttpsCallable("addMessage")
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        // This continuation runs on either success or failure, but if the task
+                        // has failed then getResult() will throw an Exception which will be
+                        // propagated down.
+                        String result = (String) task.getResult().getData();
+                        return result;
+                    }
+                });
     }
 }
